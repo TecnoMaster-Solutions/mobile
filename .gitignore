@@ -134,3 +134,27 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# ---- Flutter (proyecto en mobile/vertecx) ----
+mobile/vertecx/.dart_tool/
+mobile/vertecx/.flutter-plugins-dependencies
+mobile/vertecx/.pub-cache/
+mobile/vertecx/.pub/
+mobile/vertecx/build/
+mobile/vertecx/coverage/
+
+# Android (solo cachés locales, SÍ se versiona el wrapper)
+mobile/vertecx/android/.gradle/
+mobile/vertecx/android/local.properties
+
+# iOS/macOS efímeros
+mobile/vertecx/ios/Flutter/ephemeral/
+mobile/vertecx/macos/Flutter/ephemeral/
+
+# Xcode ruido (workspaces y derivados)
+mobile/vertecx/**/*.xcworkspace/
+mobile/vertecx/**/DerivedData/
+
+# DartPad / VS Code descubrimientos efímeros
+mobile/vertecx/.dart_tool/dartpad/
+mobile/vertecx/.dart_tool/extension_discovery/
