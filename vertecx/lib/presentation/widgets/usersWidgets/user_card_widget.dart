@@ -25,6 +25,10 @@ class UserCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final statusBgColor = _getStatusColor(user.estado);
     final statusTextColor = _getStatusTextColor(user.estado);
+    final imagePath = user.imagenPath.trim();
+    final hasRemoteImage =
+        imagePath.startsWith('http://') || imagePath.startsWith('https://');
+    final hasAssetImage = imagePath.isNotEmpty;
 
     return Column(
       children: [
@@ -43,9 +47,9 @@ class UserCardWidget extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    (user.imagenPath.startsWith('http'))
+                    (hasRemoteImage)
                         ? Image.network(
-                            user.imagenPath,
+                            imagePath,
                             width: 60,
                             height: 60,
                             errorBuilder: (context, error, stackTrace) =>
@@ -55,7 +59,23 @@ class UserCardWidget extends StatelessWidget {
                                   height: 60,
                                 ),
                           )
-                        : Image.asset(user.imagenPath, width: 60, height: 60),
+                        : (hasAssetImage
+                            ? Image.asset(
+                                imagePath,
+                                width: 60,
+                                height: 60,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                      'assets/icons/userP.png',
+                                      width: 60,
+                                      height: 60,
+                                    ),
+                              )
+                            : Image.asset(
+                                'assets/icons/userP.png',
+                                width: 60,
+                                height: 60,
+                              )),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -70,7 +90,10 @@ class UserCardWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 5),
-                          Row(
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 6,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               //Usamos el chip animado reciclable
                               AnimatedStatusChip(
@@ -95,7 +118,6 @@ class UserCardWidget extends StatelessWidget {
                                   );
                                 },
                               ),
-                              const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 15,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/categoryProducts/categoryProducts_model.dart';
@@ -58,7 +58,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
       create: (_) =>
           CategoryProductBloc(CategoryProductsService())..add(LoadCategories()),
       child: Scaffold(
-        appBar: const AppTopBar(title: 'Categorías de productos', showMenu: true),
+        appBar: const AppTopBar(title: 'Categorí­as de productos', showMenu: true),
         drawer: Drawer(
           backgroundColor: Colors.transparent,
           child: SideMenuPanel(
@@ -129,7 +129,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // BotÃ³n para cargar mÃ¡s
+                      // BotÃƒÂ³n para cargar mÃƒÂ¡s
                       if (filteredCategories.isNotEmpty)
                         if (!allCategoriesLoaded)
                           TextButton(
@@ -141,10 +141,11 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                                   "assets/icons/Vector.png",
                                   width: 20,
                                   height: 20,
+                                  color: const Color(0xFF089642),
                                 ),
                                 const Text(
                                   "Cargar más Categorí­as de productos",
-                                  style: TextStyle(color: Color(0xFFB20000)),
+                                  style: TextStyle(color: Color(0xFF089642)),
                                 ),
                               ],
                             ),
@@ -155,7 +156,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                             child: Text(
                               "Ya están todas las categorí­as de productos",
                               style: TextStyle(
-                                color: Color(0xFFB20000),
+                                color: Color(0xFF089642),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -166,7 +167,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                           child: Text(
                             "No se encontraron categorías de productos",
                             style: TextStyle(
-                              color: Color(0xFFB20000),
+                              color: Color(0xFF089642),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -178,16 +179,17 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
               );
             }
 
-            // Estado inicial vacÃ­o
+            // Estado inicial vacÃƒÂ­o
             return const Center(child: CircularProgressIndicator());
           },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _scrollToTop,
-          backgroundColor: const Color(0xFFB20000),
+          backgroundColor: const Color(0xFF089642),
           child: const Icon(Icons.arrow_upward, color: Colors.white),
         ),
       ),
     );
   }
 }
+

@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
 
-const _sideMenuWine = Color(0xFFB20000);
+const _sideMenuBg = Color(0xFF04652C);
+const _sideMenuCollapse = Color(0xFF034A21);
+const _sideMenuHover = Color(0xFF058A3C);
+const _sideMenuActiveSubmenu = Color(0xFF06A646);
+const _sideMenuActiveLink = Color(0xFF08873C);
+const _sideMenuBorder = Color(0xFFC3E6D2);
+const _sideMenuDropdownBg = Color(0xFFD0F0DC);
+const _sideMenuSecondaryText = Color(0xFFE6F6EC);
+const _sideMenuDropdownText = Color(0xFF04652C);
 
 class SideMenuButton extends StatelessWidget {
   static const double buttonSize = 44;
@@ -13,7 +21,7 @@ class SideMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 2,
-      color: Colors.white,
+      color: _sideMenuCollapse,
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
         width: buttonSize,
@@ -21,7 +29,7 @@ class SideMenuButton extends StatelessWidget {
         child: Builder(
           builder: (context) => IconButton(
             onPressed: () => Scaffold.of(context).openDrawer(),
-            icon: const Icon(Icons.menu, color: Color(0xFFB20000)),
+            icon: const Icon(Icons.menu, color: Colors.white),
           ),
         ),
       ),
@@ -81,6 +89,15 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
         .toList(growable: false);
   }
 
+  bool _isRouteActive(String? route) {
+    if (route == null) return false;
+    return ModalRoute.of(context)?.settings.name == route;
+  }
+
+  bool _isSubmenuActive(List<_SideMenuItem> children) {
+    return children.any((child) => _isRouteActive(child.route));
+  }
+
   Widget _buildItem(_SideMenuItem item) {
     if (!item.hasChildren && !_hasPermission(item)) {
       return const SizedBox.shrink();
@@ -109,8 +126,12 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
         : const SizedBox.shrink();
 
     if (!item.hasChildren) {
+      final isActive = _isRouteActive(item.route);
       return ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        tileColor: isActive ? _sideMenuActiveLink : null,
+        hoverColor: _sideMenuHover,
         leading: leading,
         title: Text(
           item.label,
@@ -124,10 +145,14 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
     }
 
     final isExpanded = _expanded.contains(item.label);
+    final isActiveGroup = _isSubmenuActive(children);
     return Column(
       children: [
         ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          tileColor: (isExpanded || isActiveGroup) ? _sideMenuActiveSubmenu : null,
+          hoverColor: _sideMenuHover,
           leading: leading,
           title: Text(
             item.label,
@@ -139,7 +164,10 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
           trailing: AnimatedRotation(
             turns: isExpanded ? 0.5 : 0,
             duration: const Duration(milliseconds: 380),
-            child: const Icon(Icons.keyboard_arrow_down, color: Colors.white70),
+            child: const Icon(
+              Icons.keyboard_arrow_down,
+              color: _sideMenuSecondaryText,
+            ),
           ),
           onTap: () => _toggle(item.label),
         ),
@@ -149,19 +177,38 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
           child: Column(
             children: [
               if (isExpanded)
-                ...children.map(
-                  (child) => Padding(
-                    padding: const EdgeInsets.only(left: 48),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                      dense: true,
-                      leading: const SizedBox.shrink(),
-                      title: Text(
-                        child.label,
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      onTap: () => _navigate(child.route!),
-                    ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _sideMenuDropdownBg,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: _sideMenuBorder),
+                  ),
+                  child: Column(
+                    children: children.map((child) {
+                      final isActive = _isRouteActive(child.route);
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                          dense: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          tileColor: isActive ? _sideMenuActiveLink : null,
+                          hoverColor: _sideMenuHover.withValues(alpha: 0.2),
+                          leading: const SizedBox.shrink(),
+                          title: Text(
+                            child.label,
+                            style: TextStyle(
+                              color: isActive ? Colors.white : _sideMenuDropdownText,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () => _navigate(child.route!),
+                        ),
+                      );
+                    }).toList(growable: false),
                   ),
                 ),
             ],
@@ -180,10 +227,13 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
           width: 250,
           height: double.infinity,
           decoration: const BoxDecoration(
-            color: _sideMenuWine,
+            color: _sideMenuBg,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(24),
               bottomRight: Radius.circular(24),
+            ),
+            border: Border(
+              right: BorderSide(color: _sideMenuBorder),
             ),
             boxShadow: [
               BoxShadow(
@@ -209,7 +259,7 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
                       child: const Text(
                         'v',
                         style: TextStyle(
-                          color: _sideMenuWine,
+                          color: _sideMenuBg,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -230,7 +280,7 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
                           Text(
                             'Panel de gestion',
                             style: TextStyle(
-                              color: Colors.white70,
+                              color: _sideMenuSecondaryText,
                               fontSize: 12,
                             ),
                           ),
@@ -244,7 +294,7 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
                   ],
                 ),
               ),
-              const Divider(color: Colors.white24, height: 1),
+              const Divider(color: _sideMenuBorder, height: 1),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -255,11 +305,12 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
                         children: _menuItems.map(_buildItem).toList(),
                       ),
                     ),
-                    const Divider(color: Colors.white24, height: 1),
+                    const Divider(color: _sideMenuBorder, height: 1),
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
+                      hoverColor: _sideMenuHover,
                       leading: const Icon(Icons.logout, color: Colors.white),
                       title: const Text(
                         'Salir',

@@ -46,7 +46,7 @@ class StateChartWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             description,
-            style: const TextStyle(fontSize: 12, color: Colors.black54),
+            style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -67,7 +67,7 @@ class StateChartWidget extends StatelessWidget {
                         return BarTooltipItem(
                           value.toString(),
                           const TextStyle(
-                            color: Color(0xFF00C2FF),
+                            color: Color(0xFF04652C),
                             fontWeight: FontWeight.bold,
                           ),
                         );
@@ -121,12 +121,12 @@ class StateChartWidget extends StatelessWidget {
             BarChartRodStackItem(
               0,
               maxValue.toDouble(),
-              const Color(0xFFF08080),
+              const Color(0xFFE9E9E9),
             ),
             BarChartRodStackItem(
               0,
               value.toDouble(),
-              const Color(0xFFB20000),
+              const Color(0xFF06A646),
             ),
           ],
         ),

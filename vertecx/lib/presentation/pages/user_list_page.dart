@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/users/user_model.dart';
@@ -167,7 +167,7 @@ class UserListPageState extends State<UserListPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // BotÃ³n para cargar mÃ¡s
+                        // BotÃƒÂ³n para cargar mÃƒÂ¡s
                         if (filteredUsers.isNotEmpty)
                           if (!allUsersLoaded)
                             TextButton(
@@ -179,10 +179,11 @@ class UserListPageState extends State<UserListPage> {
                                     "assets/icons/Vector.png",
                                     width: 20,
                                     height: 20,
+                                    color: const Color(0xFF089642),
                                   ),
                                   const Text(
-                                    "Cargar mÃ¡s Usuarios",
-                                    style: TextStyle(color: Color(0xFFB20000)),
+                                    "Cargar más Usuarios",
+                                    style: TextStyle(color: Color(0xFF089642)),
                                   ),
                                 ],
                               ),
@@ -191,9 +192,9 @@ class UserListPageState extends State<UserListPage> {
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                "Ya estÃ¡n todos los usuarios",
+                                "Ya están todos los usuarios",
                                 style: TextStyle(
-                                  color: Color(0xFFB20000),
+                                  color: Color(0xFF089642),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -204,7 +205,7 @@ class UserListPageState extends State<UserListPage> {
                             child: Text(
                               "No se encontraron usuarios",
                               style: TextStyle(
-                                color: Color(0xFFB20000),
+                                color: Color(0xFF089642),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -222,7 +223,7 @@ class UserListPageState extends State<UserListPage> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: _scrollToTop,
-            backgroundColor: const Color(0xFFB20000),
+            backgroundColor: const Color(0xFF089642),
             child: const Icon(Icons.arrow_upward, color: Colors.white),
           ),
         ),
@@ -230,3 +231,4 @@ class UserListPageState extends State<UserListPage> {
     );
   }
 }
+

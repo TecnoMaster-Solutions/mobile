@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
@@ -66,7 +66,7 @@ class _AppointmentServiceDetailState extends State<AppointmentServiceDetail> {
     if (value == null) return "Mantenimiento:";
     final normalized = value.toLowerCase();
     if (normalized.contains('instal')) {
-      return "Instalacion:";
+      return "Instalación:";
     }
     if (normalized.contains('preventivo') ||
         normalized.contains('correctivo') ||
@@ -118,7 +118,7 @@ class _AppointmentServiceDetailState extends State<AppointmentServiceDetail> {
                 Container(
                   width: 6,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFB20000),
+                    color: Color(0xFF04652C),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                       bottomLeft: Radius.circular(16),
@@ -200,7 +200,7 @@ class _AppointmentServiceDetailState extends State<AppointmentServiceDetail> {
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 15,
-                                      color: Color(0xFFC20000),
+                                      color: Color(0xFF089642),
                                     ),
                                   ),
                                 ),
@@ -224,7 +224,7 @@ class _AppointmentServiceDetailState extends State<AppointmentServiceDetail> {
                         const Divider(
                           height: 24,
                           thickness: 1,
-                          color: Color(0xFFE8E8E8),
+                          color: Color(0xFFE9E9E9),
                         ),
                         const Text(
                           "Detalle del servicio",
@@ -264,7 +264,7 @@ class _AppointmentServiceDetailState extends State<AppointmentServiceDetail> {
                                   "Monto: ${detail.monto}",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFFC20000),
+                                    color: Color(0xFF089642),
                                   ),
                                 ),
                               ],
@@ -442,8 +442,9 @@ class AppointmentDetailData {
 
   static String _formatCurrency(int value) {
     if (value <= 0) return 'Valor no registrado';
-    final formatter = NumberFormat.simpleCurrency(
+    final formatter = NumberFormat.currency(
       locale: 'es_CO',
+      symbol: '\$',
       decimalDigits: 0,
     );
     return formatter.format(value);
@@ -575,3 +576,4 @@ Future<AppointmentDetailData> loadAppointmentDetail(
     );
   }
 }
+

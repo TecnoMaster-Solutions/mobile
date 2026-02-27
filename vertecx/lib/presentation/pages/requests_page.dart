@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vertecx/data/repositories/request/bloc/requests_bloc.dart';
@@ -207,7 +207,7 @@ class _RequestsScaffoldState extends State<_RequestsScaffold> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'requests_scroll_top_fab',
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
@@ -370,3 +370,4 @@ class _SearchBoxState extends State<_SearchBox> {
     );
   }
 }
+

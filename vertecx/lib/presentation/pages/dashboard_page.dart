@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/dashboard/dashboard_models.dart';
 import 'package:vertecx/data/repositories/appointmentRepositories/appointment_repository.dart';
@@ -31,6 +32,32 @@ class _DashboardPageState extends State<DashboardPage> {
   late final List<int> _years;
   late int _selectedYear;
   List<String> _permissions = const <String>[];
+  final NumberFormat _copNumberFormat = NumberFormat.decimalPattern('es_CO');
+
+  String _formatCurrencyValue(double value) {
+    return '\$${_copNumberFormat.format(value.round())}';
+  }
+
+  bool _isSalesPending(SalesState state) =>
+      state is SalesInitial || state is SalesLoading;
+
+  bool _isClientsPending(ClientsState state) =>
+      state is ClientsInitial || state is ClientsLoading;
+
+  bool _isPurchasesPending(PurchasesState state) =>
+      state is PurchasesInitial || state is PurchasesLoading;
+
+  bool _isAppointmentsPending(AppointmentsState state) =>
+      state is AppointmentsInitial || state is AppointmentsLoading;
+
+  bool _isOrdersPending(OrdersState state) =>
+      state is OrdersInitial || state is OrdersLoading;
+
+  bool _isProductsPending(ProductsState state) =>
+      state is ProductsInitial || state is ProductsLoading;
+
+  bool _isCalendarPending(CalendarState state) =>
+      state is CalendarInitial || state is CalendarLoading;
 
   @override
   void initState() {
@@ -64,7 +91,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Text(
                       year.toString(),
                       style: const TextStyle(
-                        color: Colors.black87,
+                        color: Color(0xFF000000),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -74,7 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
             if (value == null) return;
             setState(() => _selectedYear = value);
           },
-          icon: const Icon(Icons.expand_more, color: Colors.black87, size: 18),
+          icon: const Icon(Icons.expand_more, color: Color(0xFF000000), size: 18),
           dropdownColor: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
@@ -96,7 +123,7 @@ class _DashboardPageState extends State<DashboardPage> {
         BlocProvider(create: (_) => CalendarBloc(AppointmentRepository())..add(LoadAllAppointments())),
       ],
       child: Scaffold(
-        backgroundColor: const Color(0xFFE8E8E8),
+        backgroundColor: const Color(0xFFF4F4F4),
         appBar: AppTopBar(
           showMenu: true,
           extraActions: [_buildYearSelector()],
@@ -115,11 +142,38 @@ class _DashboardPageState extends State<DashboardPage> {
             },
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
+        body: Builder(
+          builder: (context) {
+            final salesState = context.select((SalesBloc bloc) => bloc.state);
+            final clientsState =
+                context.select((ClientsBloc bloc) => bloc.state);
+            final purchasesState =
+                context.select((PurchasesBloc bloc) => bloc.state);
+            final appointmentsState =
+                context.select((AppointmentsBloc bloc) => bloc.state);
+            final ordersState = context.select((OrdersBloc bloc) => bloc.state);
+            final productsState =
+                context.select((ProductsBloc bloc) => bloc.state);
+            final calendarState =
+                context.select((CalendarBloc bloc) => bloc.state);
+
+            final showGlobalLoading = _isSalesPending(salesState) ||
+                _isClientsPending(clientsState) ||
+                _isPurchasesPending(purchasesState) ||
+                _isAppointmentsPending(appointmentsState) ||
+                _isOrdersPending(ordersState) ||
+                _isProductsPending(productsState) ||
+                _isCalendarPending(calendarState);
+
+            if (showGlobalLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
                 GridView.count(
                   crossAxisCount: 2,
                   shrinkWrap: true,
@@ -134,14 +188,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           final total = state.sales.fold<double>(0.0, (sum, s) => sum + s.amount);
                           return SummaryCard(
                             icon: Icons.attach_money,
-                            iconColor: Colors.green,
+                            iconColor: const Color(0xFF06A646),
                             title: "Ventas:",
-                            value: "\$${total.toStringAsFixed(0)}",
+                            value: _formatCurrencyValue(total),
                           );
                         }
                         return const SummaryCard(
                           icon: Icons.attach_money,
-                          iconColor: Colors.green,
+                          iconColor: Color(0xFF06A646),
                           title: "Ventas:",
                           value: "...",
                         );
@@ -153,14 +207,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           final total = state.purchases.fold<double>(0.0, (sum, s) => sum + s.amount);
                           return SummaryCard(
                             icon: Icons.shopping_cart,
-                            iconColor: Colors.red,
+                            iconColor: const Color(0xFF08873C),
                             title: "Compras:",
-                            value: "\$${total.toStringAsFixed(0)}",
+                            value: _formatCurrencyValue(total),
                           );
                         }
                         return const SummaryCard(
                           icon: Icons.shopping_cart,
-                          iconColor: Colors.red,
+                          iconColor: Color(0xFF08873C),
                           title: "Compras:",
                           value: "...",
                         );
@@ -172,14 +226,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           final total = state.total;
                           return SummaryCard(
                             icon: Icons.event_note,
-                            iconColor: Colors.black87,
+                            iconColor: const Color(0xFF04652C),
                             title: "Solicitudes de servicio:",
                             value: total.toString(),
                           );
                         }
                         return const SummaryCard(
                           icon: Icons.event_note,
-                          iconColor: Colors.black87,
+                          iconColor: Color(0xFF04652C),
                           title: "Solicitudes de servicio:",
                           value: "...",
                         );
@@ -191,14 +245,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           final total = state.total;
                           return SummaryCard(
                             icon: Icons.inventory,
-                            iconColor: Colors.black87,
+                            iconColor: const Color(0xFF034A21),
                             title: "Ordenes:",
                             value: total.toString(),
                           );
                         }
                         return const SummaryCard(
                           icon: Icons.inventory,
-                          iconColor: Colors.black87,
+                          iconColor: Color(0xFF034A21),
                           title: "Ordenes:",
                           value: "...",
                         );
@@ -369,7 +423,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             if (todaysAppointments.isEmpty)
                               const Text(
                                 "No hay citas para hoy",
-                                style: TextStyle(color: Color(0xFF6E6E6E)),
+                                style: TextStyle(color: Color(0xFF9CA3AF)),
                               ),
                             ...todaysAppointments
                                 .map((cita) => AppointmentCard(cita: cita))
@@ -383,9 +437,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     return const SizedBox();
                   },
                 ),
-              ],
-            ),
-          ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

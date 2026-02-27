@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/purchasesWidgets/purchase_card_widget.dart';
 import 'package:vertecx/presentation/widgets/components/search/search.dart';
@@ -15,14 +15,14 @@ class _PurchasesPageState extends State<PurchasesPage> {
   int _purchasesToShow = 4; // cantidad inicial de compras
   String _searchQuery = "";
 
-  // 🔹 Cargar más registros
+  // ðŸ”¹ Cargar mÃ¡s registros
   void _loadMorePurchases() {
     setState(() {
       _purchasesToShow = (_purchasesToShow + 2).clamp(0, mockPurchases.length);
     });
   }
 
-  // 🔹 Subir al inicio
+  // ðŸ”¹ Subir al inicio
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -33,7 +33,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 🔎 Filtrar compras por proveedor o ID
+    // ðŸ”Ž Filtrar compras por proveedor o ID
     final filteredPurchases = mockPurchases.where((p) {
       final query = _searchQuery.toLowerCase();
       return p.proveedor.toLowerCase().contains(query) ||
@@ -41,7 +41,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
           p.factura.toLowerCase().contains(query);
     }).toList();
 
-    // Paginación
+    // PaginaciÃ³n
     final purchases = filteredPurchases.take(_purchasesToShow).toList();
     final allPurchasesLoaded = _purchasesToShow >= filteredPurchases.length;
 
@@ -54,7 +54,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
           children: [
             const SizedBox(height: 20),
 
-            // 🔎 Buscador
+            // ðŸ”Ž Buscador
             Buscar(
               hintText: "Buscar proveedor, OC o factura...",
               onChanged: (value) {
@@ -66,7 +66,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
 
             const SizedBox(height: 20),
 
-            // 📋 Lista de compras
+            // ðŸ“‹ Lista de compras
             if (purchases.isNotEmpty)
               ...purchases.map((p) => PurchaseCardWidget(compra: p))
             else
@@ -83,7 +83,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
 
             const SizedBox(height: 20),
 
-            // 🔽 Botón cargar más o mensaje final
+            // ðŸ”½ BotÃ³n cargar mÃ¡s o mensaje final
             if (filteredPurchases.isNotEmpty)
               if (!allPurchasesLoaded)
                 TextButton(
@@ -96,7 +96,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar más compras",
+                        "Cargar mÃ¡s compras",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -106,7 +106,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya están todas las compras",
+                    "Ya estÃ¡n todas las compras",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -119,12 +119,13 @@ class _PurchasesPageState extends State<PurchasesPage> {
         ),
       ),
 
-      // ⬆️ Botón flotante para subir
+      // â¬†ï¸ BotÃ³n flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

@@ -109,7 +109,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         resolvedTitle,
         style: const TextStyle(
-          color: Color(0xFFB20000),
+          color: Color(0xFF04652C),
           fontWeight: FontWeight.w700,
         ),
       ),

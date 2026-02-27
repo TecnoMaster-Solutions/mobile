@@ -48,6 +48,9 @@ class UserModel {
       // Si no existe, usa "Sin tipo"
     }
 
+    final rawImage = (json['image'] ?? '').toString().trim();
+    final safeImagePath = rawImage.isNotEmpty ? rawImage : 'assets/icons/userP.png';
+
     return UserModel(
       id: json['userid'].toString(),
       nombreCompleto: "${json['name']} ${json['lastname']}".trim(),
@@ -56,7 +59,7 @@ class UserModel {
       email: json['email'],
       estado: estado,
       roleString: roleName,
-      imagenPath: json['image'] ?? 'assets/icons/userP.png',
+      imagenPath: safeImagePath,
       tipoDocumento: tipoDoc,
     );
   }

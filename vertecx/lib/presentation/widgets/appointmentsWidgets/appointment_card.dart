@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
@@ -61,7 +61,7 @@ class AppointmentCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              //Columna izquierda (Día)
+              //Columna izquierda (DÃ­a)
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -95,7 +95,7 @@ class AppointmentCard extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 12),
                 width: 3,
-                color: const Color(0xFFE8E8E8),
+                color: const Color(0xFFE9E9E9),
               ),
 
               // Contenido principal
@@ -114,7 +114,7 @@ class AppointmentCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFFB20000),
+                              color: Color(0xFF04652C),
                             ),
                           ),
                         ),
@@ -149,7 +149,7 @@ class AppointmentCard extends StatelessWidget {
 
                     const SizedBox(height: 4),
 
-                    // Descripción
+                    // DescripciÃ³n
                     Text(
                       cita.orden.descripcion,
                       style: const TextStyle(
@@ -160,7 +160,7 @@ class AppointmentCard extends StatelessWidget {
 
                     const SizedBox(height: 8),
 
-                    // Técnico
+                    // TÃ©cnico
                     Row(
                       children: [
                         const Icon(
@@ -179,7 +179,7 @@ class AppointmentCard extends StatelessWidget {
                           ),
                         ),
 
-                        //Estado interactivo con confirmación
+                        //Estado interactivo con confirmaciÃ³n
                         PopupMenuButton<String>(
                           onSelected: (value) {
                             AppDialogs.showConfirmChangeStatus(
@@ -248,3 +248,4 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 }
+

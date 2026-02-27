@@ -9,12 +9,12 @@ class ProductsPieChartWidget extends StatelessWidget {
 
   //Paleta de colores de claro a oscuro
   final List<Color> colors = const [
-    Color(0xFFE60000),
-    Color(0xFFD00000),
-    Color(0xFFB20000),
-    Color(0xFF990000),
-    Color(0xFF800000),
-    Color(0xFF660000),
+    Color(0xFF089642),
+    Color(0xFF08873C),
+    Color(0xFF06A646),
+    Color(0xFF058A3C),
+    Color(0xFF04652C),
+    Color(0xFF034A21),
   ];
 
   @override

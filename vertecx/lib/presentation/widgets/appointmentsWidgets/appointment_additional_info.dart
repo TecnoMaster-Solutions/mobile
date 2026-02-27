@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
 
 class AppointmentAdditionalInfo extends StatelessWidget {
@@ -28,7 +28,7 @@ class AppointmentAdditionalInfo extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // Observación
+          // ObservaciÃ³n
           if (cita.observaciones.isNotEmpty)
             _buildInfoCard(
               icon: Icons.warning_amber_rounded,
@@ -67,7 +67,7 @@ class AppointmentAdditionalInfo extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xFFC20000)),
+          Icon(icon, color: const Color(0xFF058A3C)),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -92,3 +92,4 @@ class AppointmentAdditionalInfo extends StatelessWidget {
     );
   }
 }
+

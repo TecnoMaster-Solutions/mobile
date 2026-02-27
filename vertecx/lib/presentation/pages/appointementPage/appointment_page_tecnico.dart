@@ -89,7 +89,7 @@ class _AppointmentPageTecnicoState extends State<AppointmentPageTecnico> {
           },
         ),
       ),
-      backgroundColor: const Color(0xFFE8E8E8),
+      backgroundColor: const Color(0xFFF4F4F4),
       body: BlocListener<CalendarBloc, CalendarState>(
             listener: (context, state) {
               if (state is CalendarLoaded) {
@@ -134,7 +134,7 @@ class _AppointmentPageTecnicoState extends State<AppointmentPageTecnico> {
 
                   if (filtered.isEmpty) {
                     appointmentsSection = const Center(
-                      child: Text("No hay citas para este dÃ­Â­a"),
+                      child: Text("No hay citas para este dí­a"),
                     );
                   } else {
                     appointmentsSection = ListView.builder(
@@ -209,12 +209,12 @@ class _AppointmentPageTecnicoState extends State<AppointmentPageTecnico> {
                             daysOfWeekHeight: 45,
                             calendarStyle: const CalendarStyle(
                               todayDecoration: BoxDecoration(
-                                color: Color(0xFFFFD6D6),
+                                color: Color(0xFF9FE3B4),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(6)),
                               ),
                               selectedDecoration: BoxDecoration(
-                                color: Color(0xFFB20000),
+                                color: Color(0xFF089642),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(6)),
                               ),
@@ -245,7 +245,7 @@ class _AppointmentPageTecnicoState extends State<AppointmentPageTecnico> {
                                     borderRadius: BorderRadius.circular(6),
                                     border: hasAppointment
                                         ? Border.all(
-                                            color: const Color(0xFFCC0000),
+                                            color: const Color(0xFF04652C),
                                             width: 3,
                                           )
                                         : null,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/appointmentsWidgets/appointment_additional_info.dart';
@@ -28,7 +28,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppTopBar(title: 'Detalles de la cita', showBack: true),
-      backgroundColor: const Color(0xFFE8E8E8),
+      backgroundColor: const Color(0xFFF4F4F4),
       body: Column(
         children: [
           Expanded(
@@ -54,3 +54,4 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
     );
   }
 }
+
