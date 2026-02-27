@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:vertecx/data/models/dashboard/dashboard_models.dart';
 import 'package:vertecx/data/repositories/dashboard/bloc/dashboard_event.dart';
 import 'package:vertecx/data/repositories/dashboard/bloc/dashboard_bloc.dart';
@@ -22,6 +23,10 @@ class YearSalesChartWidget extends StatelessWidget {
     required this.year,
   });
 
+  String _formatWithThousands(double value) {
+    return NumberFormat.decimalPattern('es_CO').format(value.round());
+  }
+
   @override
   Widget build(BuildContext context) {
     final maxVenta = sales.map((s) => s.amount).reduce((a, b) => a > b ? a : b);
@@ -42,8 +47,8 @@ class YearSalesChartWidget extends StatelessWidget {
             children: [
               Text(
                 isClientChart
-                    ? "$title $year: ${maxVenta.toStringAsFixed(0)}"
-                    : "$title $year: \$${maxVenta.toStringAsFixed(0)}",
+                    ? "$title $year: ${_formatWithThousands(maxVenta)}"
+                    : "$title $year: \$${_formatWithThousands(maxVenta)}",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -107,7 +112,7 @@ class YearSalesChartWidget extends StatelessWidget {
                                     style: const TextStyle(
                                       fontSize: 9,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xFF525252),
+                                      color: Color(0xFF9CA3AF),
                                     ),
                                   );
                                 }
@@ -166,7 +171,7 @@ class YearSalesChartWidget extends StatelessWidget {
                               BarChartRodData(
                                 toY: s.amount,
                                 color: isMax
-                                    ? const Color(0xFFB20000)
+                                    ? const Color(0xFF04652C)
                                     : const Color(0xFFE9E9E9),
                                 borderRadius: BorderRadius.circular(4),
                                 width: 14,
@@ -186,7 +191,7 @@ class YearSalesChartWidget extends StatelessWidget {
                           CustomPaint(
                             size: const Size(280, 2),
                             painter: DashedLinePainter(
-                              color: Color(0xFFCC0000),
+                              color: Color(0xFF06A646),
                               dashWidth: 6,
                               dashSpace: 4,
                             ),

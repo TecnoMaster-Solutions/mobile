@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import '../widgets/components/search/search.dart';
 import 'package:vertecx/data/mocks/clients_mock_data.dart';
@@ -32,7 +32,7 @@ class _ClientsPageState extends State<ClientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // filtrar clientes por búsqueda
+    // filtrar clientes por bÃºsqueda
     final filteredClients = mockClients
         .where((c) => c.name.toLowerCase().contains(_searchQuery.toLowerCase()))
         .toList();
@@ -76,7 +76,7 @@ class _ClientsPageState extends State<ClientsPage> {
 
             const SizedBox(height: 20),
 
-            // botón o mensaje final
+            // botÃ³n o mensaje final
             if (filteredClients.isNotEmpty)
               if (!allClientsLoaded)
                 TextButton(
@@ -89,7 +89,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar más clientes",
+                        "Cargar mÃ¡s clientes",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -99,7 +99,7 @@ class _ClientsPageState extends State<ClientsPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya están todos los clientes",
+                    "Ya estÃ¡n todos los clientes",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -112,12 +112,13 @@ class _ClientsPageState extends State<ClientsPage> {
         ),
       ),
 
-      // botón flotante para subir
+      // botÃ³n flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

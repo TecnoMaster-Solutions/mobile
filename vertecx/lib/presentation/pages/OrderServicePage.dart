@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vertecx/blocs/OrderServiceController.dart';
 import 'package:vertecx/core/session_context.dart';
@@ -300,9 +300,10 @@ class _OrderServiceViewState extends State<_OrderServiceView> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'orders_scroll_top_fab',
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

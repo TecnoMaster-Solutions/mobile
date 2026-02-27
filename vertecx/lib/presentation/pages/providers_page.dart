@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/suppliers/supplier_model.dart';
 import 'package:vertecx/data/services/suppliers_service.dart';
@@ -344,9 +344,10 @@ class _ProvidersPageState extends State<ProvidersPage> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'providers_scroll_fab',
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

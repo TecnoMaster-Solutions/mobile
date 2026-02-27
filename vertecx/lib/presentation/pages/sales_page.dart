@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/data/mocks/sales_mock_data.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/salesWidgets/sales_card_widget.dart';
@@ -39,7 +39,7 @@ class _SalesPageState extends State<SalesPage> {
           s.id.toLowerCase().contains(query);
     }).toList();
 
-    // Paginación
+    // PaginaciÃ³n
     final sales = filteredSales.take(_salesToShow).toList();
     final allSalesLoaded = _salesToShow >= filteredSales.length;
 
@@ -52,7 +52,7 @@ class _SalesPageState extends State<SalesPage> {
           children: [
             const SizedBox(height: 20),
 
-            // 🔎 Buscador
+            // ðŸ”Ž Buscador
             Buscar(
               hintText: "Buscar cliente o ID...",
               onChanged: (value) {
@@ -64,11 +64,11 @@ class _SalesPageState extends State<SalesPage> {
 
             const SizedBox(height: 20),
 
-            // 📋 Lista de resultados
+            // ðŸ“‹ Lista de resultados
             if (sales.isNotEmpty)
               ...sales.map(
                 (s) =>
-                    SaleCardWidget(sale: s), // 👈 ya no tiene GestureDetector
+                    SaleCardWidget(sale: s), // ðŸ‘ˆ ya no tiene GestureDetector
               )
             else
               const Padding(
@@ -84,7 +84,7 @@ class _SalesPageState extends State<SalesPage> {
 
             const SizedBox(height: 20),
 
-            // Botón o mensaje de final
+            // BotÃ³n o mensaje de final
             if (filteredSales.isNotEmpty)
               if (!allSalesLoaded)
                 TextButton(
@@ -97,7 +97,7 @@ class _SalesPageState extends State<SalesPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar más ventas",
+                        "Cargar mÃ¡s ventas",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -107,7 +107,7 @@ class _SalesPageState extends State<SalesPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya están todas las ventas",
+                    "Ya estÃ¡n todas las ventas",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -120,12 +120,13 @@ class _SalesPageState extends State<SalesPage> {
         ),
       ),
 
-      // ⬆️ Botón flotante
+      // â¬†ï¸ BotÃ³n flotante
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -65,7 +65,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppTopBar(title: 'Técnicos', showMenu: true),
+      appBar: const AppTopBar(title: 'TÃ©cnicos', showMenu: true),
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: SideMenuPanel(
@@ -114,7 +114,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
               child: Column(
                 children: [
                   Buscar(
-                    hintText: "Buscar técnico...",
+                    hintText: "Buscar tÃ©cnico...",
                     onChanged: (v) => setState(() => _searchQuery = v),
                   ),
                   const SizedBox(height: 20),
@@ -123,7 +123,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                     ...page.map((t) => TechnicianCardWidget(technician: t))
                   else
                     const Text(
-                      "No se encontraron técnicos",
+                      "No se encontraron tÃ©cnicos",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
@@ -145,14 +145,14 @@ class _TechniciansPageState extends State<TechniciansPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
-                                  "Cargar más técnicos",
+                                  "Cargar mÃ¡s tÃ©cnicos",
                                   style: TextStyle(color: Color(0xFFB20000)),
                                 ),
                               ],
                             ),
                           )
                         : const Text(
-                            "Ya están todos los técnicos",
+                            "Ya estÃ¡n todos los tÃ©cnicos",
                             style: TextStyle(
                               color: Color(0xFFB20000),
                               fontWeight: FontWeight.bold,
@@ -171,7 +171,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "technicians_fab",
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );

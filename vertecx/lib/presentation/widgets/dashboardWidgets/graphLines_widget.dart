@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:vertecx/data/repositories/dashboard/bloc/dashboard_bloc.dart';
 import 'package:vertecx/data/repositories/dashboard/bloc/dashboard_event.dart';
 
@@ -19,6 +20,10 @@ class MonthSalesChartWidget extends StatelessWidget {
     this.isPurchasesChart = false,
     required this.year,
   });
+
+  String _formatWithThousands(double value) {
+    return NumberFormat.decimalPattern('es_CO').format(value.round());
+  }
 
   //Nombres de los meses
   String getMonthName(int month) {
@@ -52,10 +57,10 @@ class MonthSalesChartWidget extends StatelessWidget {
             children: [
               Text(
                 isClientChart
-                    ? "Clientes $monthName $year: ${total.toStringAsFixed(0)}"
+                    ? "Clientes $monthName $year: ${_formatWithThousands(total)}"
                     : isPurchasesChart
-                        ? "Compras $monthName $year: \$${total.toStringAsFixed(0)}"
-                        : "Ventas $monthName $year: \$${total.toStringAsFixed(0)}",
+                        ? "Compras $monthName $year: \$${_formatWithThousands(total)}"
+                        : "Ventas $monthName $year: \$${_formatWithThousands(total)}",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -95,7 +100,7 @@ class MonthSalesChartWidget extends StatelessWidget {
                   drawVerticalLine: false,
                   horizontalInterval: interval,
                   getDrawingHorizontalLine: (value) => FlLine(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: const Color(0xFFE9E9E9),
                     strokeWidth: 1,
                   ),
                 ),
@@ -148,7 +153,7 @@ class MonthSalesChartWidget extends StatelessWidget {
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: Colors.grey.shade300, width: 1),
+                  border: Border.all(color: const Color(0xFFE9E9E9), width: 1),
                 ),
                 minX: 0,
                 maxX: dailySales.length.toDouble() - 1,
@@ -162,14 +167,14 @@ class MonthSalesChartWidget extends StatelessWidget {
                         .map((e) => FlSpot(e.key.toDouble(), e.value))
                         .toList(),
                     isCurved: false,
-                    color: const Color(0xFFB20000),
+                    color: const Color(0xFF04652C),
                     barWidth: 2,
                     dotData: FlDotData(
                       show: true,
                       getDotPainter: (spot, percent, barData, index) =>
                           FlDotCirclePainter(
                         radius: 3,
-                        color: const Color(0xFFB20000),
+                        color: const Color(0xFF04652C),
                         strokeWidth: 1,
                         strokeColor: Colors.white,
                       ),

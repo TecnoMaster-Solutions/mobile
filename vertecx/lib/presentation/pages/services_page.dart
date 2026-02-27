@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -153,7 +153,7 @@ class _ServicesPageState extends State<ServicesPage> {
                               Text(
                                 state.loadingMore
                                     ? "Cargando..."
-                                    : "Cargar más servicios",
+                                    : "Cargar mÃ¡s servicios",
                                 style:
                                     const TextStyle(color: Color(0xFFB20000)),
                               ),
@@ -164,7 +164,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
-                            "Ya están todos los servicios",
+                            "Ya estÃ¡n todos los servicios",
                             style: TextStyle(
                               color: Color(0xFFB20000),
                               fontWeight: FontWeight.bold,
@@ -184,7 +184,7 @@ class _ServicesPageState extends State<ServicesPage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "services_fab",
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );

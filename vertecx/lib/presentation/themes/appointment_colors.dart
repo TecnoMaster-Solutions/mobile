@@ -12,8 +12,8 @@ class AppointmentColors {
       "bg": const Color(0xFFE6C97F).withOpacity(0.54),
     },
     "Cancelado": {
-      "text": const Color(0xFF870000),
-      "bg": const Color(0xFFFF8888).withOpacity(0.67),
+      "text": const Color(0xFF034A21),
+      "bg": const Color(0xFFC3E6D2).withOpacity(0.9),
     },
     "En-proceso": {
       "text": const Color(0xFF2781FF),
@@ -39,9 +39,9 @@ class AppointmentColors {
 
   /// Colores por tipo de cita
   static Map<String, Color> tipoCitaColors = {
-    "solicitud": const Color(0xFF32329A),
-    "ejecucion": const Color(0xFFE45BFF),
-    "garantia": const Color(0xFFFF6347),
-    "orden": const Color(0xFF00897B),
+    "solicitud": const Color(0xFF04652C),
+    "ejecucion": const Color(0xFF06A646),
+    "garantia": const Color(0xFF058A3C),
+    "orden": const Color(0xFF2A9781),
   };
 }

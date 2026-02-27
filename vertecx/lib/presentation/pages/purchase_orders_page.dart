@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/components/search/search.dart';
 import 'package:vertecx/data/mocks/purchase_orders_mock_data.dart';
@@ -67,7 +67,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Text(
-                  "No se encontraron órdenes",
+                  "No se encontraron Ã³rdenes",
                   style: TextStyle(
                     color: Color(0xFFB20000),
                     fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar más órdenes",
+                        "Cargar mÃ¡s Ã³rdenes",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -99,7 +99,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya están todas las órdenes",
+                    "Ya estÃ¡n todas las Ã³rdenes",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -114,9 +114,10 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
   }
 }
+

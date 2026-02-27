@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -149,7 +149,7 @@ class _RolesPageState extends State<RolesPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar más roles",
+                              "Cargar mÃ¡s roles",
                               style: TextStyle(color: Color(0xFFB20000)),
                             ),
                           ],
@@ -159,7 +159,7 @@ class _RolesPageState extends State<RolesPage> {
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          "Ya están todos los roles",
+                          "Ya estÃ¡n todos los roles",
                           style: TextStyle(
                             color: Color(0xFFB20000),
                             fontWeight: FontWeight.bold,
@@ -179,7 +179,7 @@ class _RolesPageState extends State<RolesPage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "roles_fab",
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFFB20000),
+        backgroundColor: const Color(0xFF089642),
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );

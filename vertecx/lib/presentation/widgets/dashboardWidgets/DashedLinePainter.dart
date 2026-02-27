@@ -6,7 +6,7 @@ class DashedLinePainter extends CustomPainter {
   final double dashSpace;
 
   DashedLinePainter({
-    this.color = Colors.red,
+    this.color = const Color(0xFF06A646),
     this.dashWidth = 6,
     this.dashSpace = 4,
   });
