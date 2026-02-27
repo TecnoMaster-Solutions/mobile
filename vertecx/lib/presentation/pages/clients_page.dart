@@ -32,7 +32,7 @@ class _ClientsPageState extends State<ClientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // filtrar clientes por bÃºsqueda
+    // filtrar clientes por búsqueda
     final filteredClients = mockClients
         .where((c) => c.name.toLowerCase().contains(_searchQuery.toLowerCase()))
         .toList();
@@ -76,7 +76,7 @@ class _ClientsPageState extends State<ClientsPage> {
 
             const SizedBox(height: 20),
 
-            // botÃ³n o mensaje final
+            // botón o mensaje final
             if (filteredClients.isNotEmpty)
               if (!allClientsLoaded)
                 TextButton(
@@ -89,7 +89,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar mÃ¡s clientes",
+                        "Cargar más clientes",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -99,7 +99,7 @@ class _ClientsPageState extends State<ClientsPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya estÃ¡n todos los clientes",
+                    "Ya están todos los clientes",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -112,7 +112,7 @@ class _ClientsPageState extends State<ClientsPage> {
         ),
       ),
 
-      // botÃ³n flotante para subir
+      // botón flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
         backgroundColor: const Color(0xFF089642),

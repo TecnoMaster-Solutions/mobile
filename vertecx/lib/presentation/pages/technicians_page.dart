@@ -65,7 +65,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppTopBar(title: 'TÃ©cnicos', showMenu: true),
+      appBar: const AppTopBar(title: 'Técnicos', showMenu: true),
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: SideMenuPanel(
@@ -114,7 +114,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
               child: Column(
                 children: [
                   Buscar(
-                    hintText: "Buscar tÃ©cnico...",
+                    hintText: "Buscar técnico...",
                     onChanged: (v) => setState(() => _searchQuery = v),
                   ),
                   const SizedBox(height: 20),
@@ -123,7 +123,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                     ...page.map((t) => TechnicianCardWidget(technician: t))
                   else
                     const Text(
-                      "No se encontraron tÃ©cnicos",
+                      "No se encontraron técnicos",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
@@ -145,14 +145,14 @@ class _TechniciansPageState extends State<TechniciansPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
-                                  "Cargar mÃ¡s tÃ©cnicos",
+                                  "Cargar más técnicos",
                                   style: TextStyle(color: Color(0xFFB20000)),
                                 ),
                               ],
                             ),
                           )
                         : const Text(
-                            "Ya estÃ¡n todos los tÃ©cnicos",
+                            "Ya están todos los técnicos",
                             style: TextStyle(
                               color: Color(0xFFB20000),
                               fontWeight: FontWeight.bold,

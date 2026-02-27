@@ -17,7 +17,7 @@ class UserProfile {
   final String correo;
   final String telefono;
   final String documento; // NIT/CC
-  final String avatarUrl; // puedes dejarlo vacÃƒÆ’Ã‚Â­o para placeholder
+  final String avatarUrl; 
   final String? empresa;
   final DateTime? creadoEl;
   final int? ordenes;

@@ -39,7 +39,7 @@ class _SalesPageState extends State<SalesPage> {
           s.id.toLowerCase().contains(query);
     }).toList();
 
-    // PaginaciÃ³n
+    // Paginación
     final sales = filteredSales.take(_salesToShow).toList();
     final allSalesLoaded = _salesToShow >= filteredSales.length;
 
@@ -84,7 +84,7 @@ class _SalesPageState extends State<SalesPage> {
 
             const SizedBox(height: 20),
 
-            // BotÃ³n o mensaje de final
+            // Botón o mensaje de final
             if (filteredSales.isNotEmpty)
               if (!allSalesLoaded)
                 TextButton(
@@ -97,7 +97,7 @@ class _SalesPageState extends State<SalesPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar mÃ¡s ventas",
+                        "Cargar más ventas",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -107,7 +107,7 @@ class _SalesPageState extends State<SalesPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya estÃ¡n todas las ventas",
+                    "Ya están todas las ventas",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class _SalesPageState extends State<SalesPage> {
         ),
       ),
 
-      // â¬†ï¸ BotÃ³n flotante
+      // Botón flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
         backgroundColor: const Color(0xFF089642),

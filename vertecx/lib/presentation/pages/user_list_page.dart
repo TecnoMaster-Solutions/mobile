@@ -167,7 +167,7 @@ class UserListPageState extends State<UserListPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // BotÃƒÂ³n para cargar mÃƒÂ¡s
+                        // Botón para cargar más
                         if (filteredUsers.isNotEmpty)
                           if (!allUsersLoaded)
                             TextButton(

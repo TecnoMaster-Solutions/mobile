@@ -67,7 +67,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Text(
-                  "No se encontraron Ã³rdenes",
+                  "No se encontraron órdenes",
                   style: TextStyle(
                     color: Color(0xFFB20000),
                     fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar mÃ¡s Ã³rdenes",
+                        "Cargar más órdenes",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -99,7 +99,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya estÃ¡n todas las Ã³rdenes",
+                    "Ya están todas las órdenes",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,

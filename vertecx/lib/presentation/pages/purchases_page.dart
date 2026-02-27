@@ -15,14 +15,14 @@ class _PurchasesPageState extends State<PurchasesPage> {
   int _purchasesToShow = 4; // cantidad inicial de compras
   String _searchQuery = "";
 
-  // ðŸ”¹ Cargar mÃ¡s registros
+  //  Cargar más registros
   void _loadMorePurchases() {
     setState(() {
       _purchasesToShow = (_purchasesToShow + 2).clamp(0, mockPurchases.length);
     });
   }
 
-  // ðŸ”¹ Subir al inicio
+  //  Subir al inicio
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -41,7 +41,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
           p.factura.toLowerCase().contains(query);
     }).toList();
 
-    // PaginaciÃ³n
+    // Paginación
     final purchases = filteredPurchases.take(_purchasesToShow).toList();
     final allPurchasesLoaded = _purchasesToShow >= filteredPurchases.length;
 
@@ -83,7 +83,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
 
             const SizedBox(height: 20),
 
-            // ðŸ”½ BotÃ³n cargar mÃ¡s o mensaje final
+            // Botón cargar más o mensaje final
             if (filteredPurchases.isNotEmpty)
               if (!allPurchasesLoaded)
                 TextButton(
@@ -96,7 +96,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
                         height: 20,
                       ),
                       const Text(
-                        "Cargar mÃ¡s compras",
+                        "Cargar más compras",
                         style: TextStyle(color: Color(0xFFB20000)),
                       ),
                     ],
@@ -106,7 +106,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Ya estÃ¡n todas las compras",
+                    "Ya están todas las compras",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
@@ -119,7 +119,7 @@ class _PurchasesPageState extends State<PurchasesPage> {
         ),
       ),
 
-      // â¬†ï¸ BotÃ³n flotante para subir
+      // Botón flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
         backgroundColor: const Color(0xFF089642),

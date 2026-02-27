@@ -44,7 +44,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       case AppRoutes.requests:
         return 'Solicitudes';
       case AppRoutes.techniciansList:
-        return 'Tecnicos';
+        return 'Técnicos';
       case AppRoutes.servicesList:
         return 'Servicios';
       case AppRoutes.productsList:

@@ -28,7 +28,7 @@ class AppointmentAdditionalInfo extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // ObservaciÃ³n
+          // Observación
           if (cita.observaciones.isNotEmpty)
             _buildInfoCard(
               icon: Icons.warning_amber_rounded,

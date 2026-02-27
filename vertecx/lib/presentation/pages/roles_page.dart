@@ -149,7 +149,7 @@ class _RolesPageState extends State<RolesPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar mÃ¡s roles",
+                              "Cargar más roles",
                               style: TextStyle(color: Color(0xFFB20000)),
                             ),
                           ],
@@ -159,7 +159,7 @@ class _RolesPageState extends State<RolesPage> {
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          "Ya estÃ¡n todos los roles",
+                          "Ya están todos los roles",
                           style: TextStyle(
                             color: Color(0xFFB20000),
                             fontWeight: FontWeight.bold,

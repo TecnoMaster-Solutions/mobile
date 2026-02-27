@@ -153,7 +153,7 @@ class _ServicesPageState extends State<ServicesPage> {
                               Text(
                                 state.loadingMore
                                     ? "Cargando..."
-                                    : "Cargar mÃ¡s servicios",
+                                    : "Cargar más servicios",
                                 style:
                                     const TextStyle(color: Color(0xFFB20000)),
                               ),
@@ -164,7 +164,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
-                            "Ya estÃ¡n todos los servicios",
+                            "Ya están todos los servicios",
                             style: TextStyle(
                               color: Color(0xFFB20000),
                               fontWeight: FontWeight.bold,
