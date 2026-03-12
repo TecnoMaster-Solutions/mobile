@@ -21,9 +21,10 @@ class RequestCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Card(
         elevation: 0,
-        color: Colors.grey.shade100,
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Color(0xFFD7E2DA)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -68,14 +69,14 @@ class RequestCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black87,
+                  color: Color(0xFF0D141C),
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 'Servicio: ${_serviceName(data)}',
-                style: TextStyle(
-                  color: Colors.grey.shade800,
+                style: const TextStyle(
+                  color: Color(0xFF04652C),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -172,10 +173,10 @@ class RequestCard extends StatelessWidget {
       return (const Color(0xFFE6F0FF), const Color(0xFF0B57D0));
     }
     if (l.contains('activo')) {
-      return (const Color(0xFFE9F7EC), const Color(0xFF2E7D32));
+      return (const Color(0xFFE8F6EE), const Color(0xFF04652C));
     }
     if (l.contains('compl') || l.contains('final')) {
-      return (const Color(0xFFE9F7EC), const Color(0xFF2E7D32));
+      return (const Color(0xFFE8F6EE), const Color(0xFF04652C));
     }
     if (l.contains('cancel')) {
       return (const Color(0xFFFFE6E6), const Color(0xFFB00020));

@@ -444,7 +444,8 @@ class AppointmentDetailData {
     if (value <= 0) return 'Valor no registrado';
     final formatter = NumberFormat.currency(
       locale: 'es_CO',
-      symbol: '\$',
+      name: 'COP',
+      symbol: 'COP ',
       decimalDigits: 0,
     );
     return formatter.format(value);

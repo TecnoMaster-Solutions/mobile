@@ -7,9 +7,15 @@ import 'package:vertecx/data/repositories/request/bloc/requests_state.dart';
 import 'package:vertecx/data/repositories/request/request_repository.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
-import 'package:vertecx/presentation/widgets/navigationWidgets/app_side_menu.dart';
 import 'package:vertecx/presentation/widgets/requestWidgets/request_card.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
+import 'package:vertecx/presentation/widgets/navigationWidgets/side_menu_panel.dart';
+
+const _brandGreen = Color(0xFF06A646);
+const _brandGreenDark = Color(0xFF058A3C);
+const _brandGreenDeep = Color(0xFF04652C);
+const _pageBackground = Color(0xFFF4F7F5);
+const _inputBorder = Color(0xFFD7E2DA);
 
 class RequestsPage extends StatelessWidget {
   const RequestsPage({super.key});
@@ -34,7 +40,6 @@ class _RequestsScaffold extends StatefulWidget {
 
 class _RequestsScaffoldState extends State<_RequestsScaffold> {
   final ScrollController _scrollController = ScrollController();
-  bool _menuOpen = false;
   List<String> _permissions = const <String>[];
 
   @override
@@ -74,140 +79,97 @@ class _RequestsScaffoldState extends State<_RequestsScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final topBar = const AppTopBar(
-      title: 'Solicitudes',
-      centerTitle: true,
-      showBack: false,
-    );
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F2),
-      body: Stack(
+      backgroundColor: _pageBackground,
+      drawer: Drawer(
+        backgroundColor: Colors.transparent,
+        child: SideMenuPanel(
+          permissions: _permissions,
+          onClose: () => Navigator.of(context).maybePop(),
+          onLogout: () {
+            Navigator.of(context).maybePop();
+            SessionContext.clearAll();
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+          },
+        ),
+      ),
+      appBar: const AppTopBar(
+        title: 'Solicitudes',
+        centerTitle: true,
+        showBack: false,
+        showMenu: true,
+      ),
+      body: Column(
         children: [
-          Column(
-            children: [
-              SizedBox(height: topBar.preferredSize.height, child: topBar),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(12, 12, 12, 6),
-                child: _SearchBox(),
-              ),
-              BlocBuilder<RequestsBloc, RequestsState>(
-                builder: (context, state) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
-                    child: Row(
-                      children: [
-                        ChoiceChip(
-                          label: const Text('Mas recientes'),
-                          selected:
-                              state.sortOrder == RequestsSortOrder.newestFirst,
-                          onSelected: (_) => context.read<RequestsBloc>().add(
-                            const RequestsSortChanged(
-                              RequestsSortOrder.newestFirst,
-                            ),
-                          ),
-                          selectedColor: const Color(
-                            0xFFB20000,
-                          ).withOpacity(0.12),
-                          labelStyle: TextStyle(
-                            color:
-                                state.sortOrder == RequestsSortOrder.newestFirst
-                                ? const Color(0xFFB20000)
-                                : Colors.black87,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          side: BorderSide(
-                            color:
-                                state.sortOrder == RequestsSortOrder.newestFirst
-                                ? const Color(0xFFB20000)
-                                : const Color(0xFFD1D5DB),
-                          ),
-                          backgroundColor: Colors.white,
+          const Padding(
+            padding: EdgeInsets.fromLTRB(12, 12, 12, 6),
+            child: _SearchBox(),
+          ),
+          BlocBuilder<RequestsBloc, RequestsState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+                child: Row(
+                  children: [
+                    ChoiceChip(
+                      label: const Text('Mas recientes'),
+                      selected: state.sortOrder == RequestsSortOrder.newestFirst,
+                      onSelected: (_) => context.read<RequestsBloc>().add(
+                        const RequestsSortChanged(
+                          RequestsSortOrder.newestFirst,
                         ),
-                        const SizedBox(width: 8),
-                        ChoiceChip(
-                          label: const Text('Mas antiguas'),
-                          selected:
-                              state.sortOrder == RequestsSortOrder.oldestFirst,
-                          onSelected: (_) => context.read<RequestsBloc>().add(
-                            const RequestsSortChanged(
-                              RequestsSortOrder.oldestFirst,
-                            ),
-                          ),
-                          selectedColor: const Color(
-                            0xFFB20000,
-                          ).withOpacity(0.12),
-                          labelStyle: TextStyle(
-                            color:
-                                state.sortOrder == RequestsSortOrder.oldestFirst
-                                ? const Color(0xFFB20000)
-                                : Colors.black87,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          side: BorderSide(
-                            color:
-                                state.sortOrder == RequestsSortOrder.oldestFirst
-                                ? const Color(0xFFB20000)
-                                : const Color(0xFFD1D5DB),
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                      ],
+                      ),
+                      selectedColor: _brandGreen.withOpacity(0.14),
+                      labelStyle: TextStyle(
+                        color: state.sortOrder == RequestsSortOrder.newestFirst
+                            ? _brandGreenDeep
+                            : Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      side: BorderSide(
+                        color: state.sortOrder == RequestsSortOrder.newestFirst
+                            ? _brandGreen
+                            : _inputBorder,
+                      ),
+                      backgroundColor: Colors.white,
                     ),
-                  );
-                },
-              ),
-              Expanded(child: _RequestsList(controller: _scrollController)),
-            ],
-          ),
-          Positioned(
-            top: 8,
-            left: 8,
-            child: SafeArea(
-              child: Material(
-                elevation: 2,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                child: IconButton(
-                  onPressed: () => setState(() => _menuOpen = !_menuOpen),
-                  icon: Icon(
-                    _menuOpen ? Icons.close : Icons.menu,
-                    color: const Color(0xFFB20000),
-                  ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text('Mas antiguas'),
+                      selected: state.sortOrder == RequestsSortOrder.oldestFirst,
+                      onSelected: (_) => context.read<RequestsBloc>().add(
+                        const RequestsSortChanged(
+                          RequestsSortOrder.oldestFirst,
+                        ),
+                      ),
+                      selectedColor: _brandGreen.withOpacity(0.14),
+                      labelStyle: TextStyle(
+                        color: state.sortOrder == RequestsSortOrder.oldestFirst
+                            ? _brandGreenDeep
+                            : Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      side: BorderSide(
+                        color: state.sortOrder == RequestsSortOrder.oldestFirst
+                            ? _brandGreen
+                            : _inputBorder,
+                      ),
+                      backgroundColor: Colors.white,
+                    ),
+                  ],
                 ),
-              ),
-            ),
+              );
+            },
           ),
-          if (_menuOpen)
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => setState(() => _menuOpen = false),
-                child: const ColoredBox(color: Colors.black45),
-              ),
-            ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 510),
-            curve: Curves.easeOut,
-            top: 0,
-            bottom: 0,
-            left: _menuOpen ? 0 : -260,
-            child: AppSideMenuPanel(
-              permissions: _permissions,
-              onClose: () => setState(() => _menuOpen = false),
-              onLogout: () {
-                SessionContext.clearAll();
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
-              },
-            ),
-          ),
+          Expanded(child: _RequestsList(controller: _scrollController)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'requests_scroll_top_fab',
         onPressed: _scrollToTop,
-        backgroundColor: const Color(0xFF089642),
+        backgroundColor: _brandGreenDark,
         child: const Icon(Icons.arrow_upward, color: Colors.white),
       ),
     );
@@ -229,7 +191,7 @@ class _RequestsList extends StatelessWidget {
           return Center(
             child: Text(
               state.error!,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: Color(0xFFB42318)),
             ),
           );
         }
@@ -241,7 +203,7 @@ class _RequestsList extends StatelessWidget {
                 'No hay solicitudes',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFFB20000),
+                  color: _brandGreenDeep,
                 ),
               ),
             ),
@@ -276,7 +238,7 @@ class _RequestsList extends StatelessWidget {
                           )
                         : const Text(
                             'Cargar mas solicitudes',
-                            style: TextStyle(color: Color(0xFFB20000)),
+                            style: TextStyle(color: _brandGreenDeep),
                           ),
                   ),
                 ),
@@ -289,7 +251,7 @@ class _RequestsList extends StatelessWidget {
                 child: Text(
                   'Ya estan todas las solicitudes',
                   style: TextStyle(
-                    color: Color(0xFFB20000),
+                    color: _brandGreenDeep,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -329,22 +291,23 @@ class _SearchBoxState extends State<_SearchBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 46,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: _inputBorder),
         boxShadow: const [
           BoxShadow(
-            blurRadius: 2,
+            blurRadius: 8,
             color: Color(0x11000000),
-            offset: Offset(0, 1),
+            offset: Offset(0, 3),
           ),
         ],
       ),
       child: Row(
         children: [
           const SizedBox(width: 12),
-          const Icon(Icons.search, size: 20, color: Colors.black54),
+          const Icon(Icons.search, size: 20, color: _brandGreenDeep),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(

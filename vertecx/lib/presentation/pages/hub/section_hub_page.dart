@@ -208,6 +208,11 @@ class SalesHubPage extends StatelessWidget {
           routeName: AppRoutes.requests,
         ),
         SectionHubItem(
+          icon: Icons.receipt_long,
+          label: 'Cotizaciones',
+          routeName: AppRoutes.quotes,
+        ),
+        SectionHubItem(
           icon: Icons.inventory,
           label: 'Órdenes de Servicio',
           routeName: AppRoutes.salesOrders,

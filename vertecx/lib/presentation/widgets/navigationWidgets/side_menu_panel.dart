@@ -445,6 +445,7 @@ const _menuItems = [
       'sales.read',
       'customers.read',
       'servicesrequest.read',
+      'quotes.read',
       'orderservices.read',
       'appointments.read',
     ],
@@ -463,6 +464,11 @@ const _menuItems = [
         label: 'Solicitudes',
         route: AppRoutes.requests,
         requiredPermissions: ['servicesrequest.read'],
+      ),
+      _SideMenuItem(
+        label: 'Cotizaciones',
+        route: AppRoutes.quotes,
+        requiredPermissions: ['quotes.read'],
       ),
       _SideMenuItem(
         label: 'Ordenes',
