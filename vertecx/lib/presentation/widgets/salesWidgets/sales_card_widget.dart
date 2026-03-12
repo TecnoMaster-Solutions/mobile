@@ -35,9 +35,7 @@ class SaleCardWidget extends StatelessWidget {
                     vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: sale.status == SaleStatus.finalizado
-                        ? Color(0XFFD2F5D3)
-                        : Color(0xFFF5D2D2),
+                    color: sale.statusColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -78,21 +76,41 @@ class SaleCardWidget extends StatelessWidget {
 
             const SizedBox(height: 6),
 
-            // 🔹 Fecha (único que no va en negrilla)
+            // 🔹 Fecha y Estado de Pago
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(
-                  Icons.calendar_today_outlined,
-                  size: 16,
-                  color: Colors.black54,
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today_outlined,
+                      size: 16,
+                      color: Colors.black54,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      sale.formattedDate,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  sale.formattedDate,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal, // no en negrilla
-                    color: Colors.black87,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: sale.paymentStatusColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    sale.paymentStatus,
+                    style: TextStyle(
+                      color: sale.paymentStatusColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

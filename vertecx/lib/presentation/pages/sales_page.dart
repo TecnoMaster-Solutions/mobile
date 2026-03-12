@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:vertecx/data/mocks/sales_mock_data.dart';
+import 'package:vertecx/data/repositories/sales/sale_repository.dart';
+import 'package:vertecx/data/models/sales/sale_model.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
+import 'package:vertecx/presentation/widgets/navigationWidgets/side_menu_panel.dart';
 import 'package:vertecx/presentation/widgets/salesWidgets/sales_card_widget.dart';
 import 'package:vertecx/presentation/widgets/components/search/search.dart';
 
@@ -13,12 +15,75 @@ class SalesPage extends StatefulWidget {
 
 class _SalesPageState extends State<SalesPage> {
   final ScrollController _scrollController = ScrollController();
-  int _salesToShow = 4; // cantidad inicial de ventas
+  final SaleRepository _repository = SaleRepository();
+  
+  List<SaleModel> _allSales = [];
+  List<SaleModel> _filteredSales = [];
+  bool _isLoading = true;
+  String _errorMessage = "";
   String _searchQuery = "";
+  int _itemsToShow = 4;
+  List<String> _permissions = const <String>[];
 
-  void _loadMoreSales() {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is List<String>) {
+      _permissions = args;
+      return;
+    }
+    if (args is Map<String, dynamic>) {
+      final raw = args['permissions'];
+      if (raw is List) {
+        _permissions = raw.map((e) => e.toString()).toList();
+        return;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSales();
+  }
+
+  Future<void> _loadSales() async {
     setState(() {
-      _salesToShow = (_salesToShow + 2).clamp(0, mockSales.length);
+      _isLoading = true;
+      _errorMessage = "";
+    });
+    try {
+      final sales = await _repository.fetchSales();
+      setState(() {
+        _allSales = sales;
+        _filteredSales = sales;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
+      });
+    }
+  }
+
+  void _filterSales(String query) {
+    setState(() {
+      _searchQuery = query;
+      _filteredSales = _allSales.where((s) {
+        final q = query.toLowerCase();
+        return s.clientName.toLowerCase().contains(q) ||
+               s.id.toLowerCase().contains(q) ||
+               s.saleCode.toLowerCase().contains(q);
+      }).toList();
+      _itemsToShow = 4;
+    });
+  }
+
+  void _loadMore() {
+    setState(() {
+      _itemsToShow = (_itemsToShow + 4).clamp(0, _filteredSales.length);
     });
   }
 
@@ -32,95 +97,106 @@ class _SalesPageState extends State<SalesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Filtrar ventas por nombre de cliente o ID
-    final filteredSales = mockSales.where((s) {
-      final query = _searchQuery.toLowerCase();
-      return s.clientName.toLowerCase().contains(query) ||
-          s.id.toLowerCase().contains(query);
-    }).toList();
-
-    // PaginaciÃ³n
-    final sales = filteredSales.take(_salesToShow).toList();
-    final allSalesLoaded = _salesToShow >= filteredSales.length;
+    final sales = _filteredSales.take(_itemsToShow).toList();
+    final allSalesLoaded = _itemsToShow >= _filteredSales.length;
 
     return Scaffold(
-      appBar: const AppTopBar(),
+      appBar: const AppTopBar(showMenu: true),
+      drawer: Drawer(
+        backgroundColor: Colors.transparent,
+        child: SideMenuPanel(
+          permissions: _permissions,
+          onClose: () => Navigator.of(context).maybePop(),
+          onLogout: () {
+            Navigator.of(context).maybePop();
+            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+          },
+        ),
+      ),
       backgroundColor: const Color(0xFFE8E8E8),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-
-            // ðŸ”Ž Buscador
-            Buscar(
-              hintText: "Buscar cliente o ID...",
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-            ),
-
-            const SizedBox(height: 20),
-
-            // ðŸ“‹ Lista de resultados
-            if (sales.isNotEmpty)
-              ...sales.map(
-                (s) =>
-                    SaleCardWidget(sale: s), // ðŸ‘ˆ ya no tiene GestureDetector
-              )
-            else
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Text(
-                  "No se encontraron ventas",
-                  style: TextStyle(
-                    color: Color(0xFFB20000),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+      body: RefreshIndicator(
+        onRefresh: _loadSales,
+        child: Scrollbar(
+          controller: _scrollController,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Buscar(
+                hintText: "Buscar cliente o ID...",
+                onChanged: _filterSales,
               ),
-
-            const SizedBox(height: 20),
-
-            // BotÃ³n o mensaje de final
-            if (filteredSales.isNotEmpty)
-              if (!allSalesLoaded)
-                TextButton(
-                  onPressed: _loadMoreSales,
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        "assets/icons/Vector.png",
-                        width: 20,
-                        height: 20,
-                      ),
-                      const Text(
-                        "Cargar mÃ¡s ventas",
-                        style: TextStyle(color: Color(0xFFB20000)),
-                      ),
-                    ],
+              const SizedBox(height: 20),
+              
+              if (_isLoading)
+                const Center(child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: CircularProgressIndicator(),
+                ))
+              else if (_errorMessage.isNotEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      "Error: $_errorMessage",
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
                 )
-              else
+              else if (sales.isEmpty)
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text(
-                    "Ya estÃ¡n todas las ventas",
+                    "No se encontraron ventas",
                     style: TextStyle(
                       color: Color(0xFFB20000),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                )
+              else
+                ...sales.map((s) => SaleCardWidget(sale: s)),
 
-            const SizedBox(height: 40),
-          ],
+              const SizedBox(height: 20),
+
+              if (!_isLoading && _filteredSales.isNotEmpty)
+                if (!allSalesLoaded)
+                  TextButton(
+                    onPressed: _loadMore,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/icons/Vector.png",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const Text(
+                          "Cargar más ventas",
+                          style: TextStyle(color: Color(0xFFB20000)),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Ya están todas las ventas",
+                      style: TextStyle(
+                        color: Color(0xFFB20000),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
         ),
       ),
-
-      // â¬†ï¸ BotÃ³n flotante
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
         backgroundColor: const Color(0xFF089642),

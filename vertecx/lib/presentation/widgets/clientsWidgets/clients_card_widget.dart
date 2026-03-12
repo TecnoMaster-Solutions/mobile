@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:vertecx/data/models/clients/client_model.dart';
+import 'package:vertecx/data/models/clients/customer_model.dart';
 
 class ClientCardWidget extends StatelessWidget {
-  final ClientModel client;
+  final CustomerModel client;
 
   const ClientCardWidget({super.key, required this.client});
 
   @override
   Widget build(BuildContext context) {
-    final isActive = client.status == ClientStatus.activo;
+    final isActive = client.isActive;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -119,15 +119,31 @@ class ClientCardWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ID
+                // Documento
                 Row(
                   children: [
                     const Icon(Icons.credit_card, size: 18, color: Colors.grey),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        client.id,
+                        client.documentNumber,
                         style: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+
+                // Ciudad
+                Row(
+                  children: [
+                    const Icon(Icons.location_city, size: 18, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        client.city ?? "Ciudad no informada",
+                        style: const TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

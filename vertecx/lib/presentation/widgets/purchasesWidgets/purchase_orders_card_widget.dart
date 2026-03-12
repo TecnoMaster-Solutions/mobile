@@ -19,10 +19,10 @@ class PurchaseOrderCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _row("N° orden", order.id, boldValue: true),
+          _row("N° orden", order.orderIdString, boldValue: true),
           _row("Proveedor", order.supplier),
-          _row("Producto/servicio", order.service),
-          _row("Fecha", order.formattedDate),
+          _row("Fecha entrega", order.formattedEstimatedDeliveryDate),
+          _row("Total con IVA", order.formattedTotal),
           Row(
             children: [
               const Text(
