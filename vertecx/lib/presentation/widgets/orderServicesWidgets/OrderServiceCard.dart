@@ -16,8 +16,10 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final f = DateFormat('dd/MM/yyyy HH:mm');
-    final currency = NumberFormat.simpleCurrency(
+    final currency = NumberFormat.currency(
       locale: 'es_CO',
+      name: 'COP',
+      symbol: 'COP ',
       decimalDigits: 0,
     );
 
@@ -26,9 +28,10 @@ class OrderCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Card(
         elevation: 0,
-        color: Colors.grey.shade100,
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Color(0xFFD7E2DA)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -69,8 +72,8 @@ class OrderCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 'Cliente: ${order.cliente}',
-                style: TextStyle(
-                  color: Colors.grey.shade800,
+                style: const TextStyle(
+                  color: Color(0xFF04652C),
                   fontWeight: FontWeight.w600,
                 ),
               ),

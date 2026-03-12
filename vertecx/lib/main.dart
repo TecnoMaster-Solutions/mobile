@@ -53,6 +53,7 @@ import 'package:vertecx/presentation/pages/technicians_page.dart';
 import 'package:vertecx/presentation/pages/services_page.dart';
 import 'package:vertecx/presentation/pages/roles_page.dart';
 import 'package:vertecx/presentation/pages/OrderServicePage.dart';
+import 'package:vertecx/presentation/pages/quotes_page.dart';
 import 'package:vertecx/presentation/pages/requests_page.dart';
 
 Future<void> main() async {
@@ -121,6 +122,7 @@ class _RouteGuard {
     AppRoutes.sales: (_) => const SalesPage(),
     AppRoutes.clients: (_) => const ClientsPage(),
     AppRoutes.requests: (_) => const RequestsPage(),
+    AppRoutes.quotes: (_) => const QuotesPage(),
     AppRoutes.salesOrders: (_) => const OrderServicePage(),
     AppRoutes.salesAppointments: (_) => const AppointmentPageTecnico(),
     AppRoutes.rolesList: (_) => const RolesPage(),
@@ -148,6 +150,7 @@ class _RouteGuard {
     AppRoutes.sales: ['sales.read'],
     AppRoutes.clients: ['customers.read'],
     AppRoutes.requests: ['servicesrequest.read'],
+    AppRoutes.quotes: ['quotes.read'],
     AppRoutes.salesOrders: ['orderservices.read'],
     AppRoutes.salesAppointments: ['appointments.read'],
     AppRoutes.appointment: ['appointments.read'],
@@ -164,6 +167,7 @@ class _RouteGuard {
       'sales.read',
       'customers.read',
       'servicesrequest.read',
+      'quotes.read',
       'orderservices.read',
       'appointments.read',
     ],

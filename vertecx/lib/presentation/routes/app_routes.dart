@@ -22,6 +22,7 @@ class AppRoutes {
   static const String appointmentTechnician = '/appointment/technician';
   static const String clients = '/sales/clients';
   static const String requests = '/sales/requests';
+  static const String quotes = '/sales/quotes';
   static const String salesOrders = '/sales/orders';
   static const String salesAppointments = '/sales/appointments';
   static const String rolesList = '/roles/list';
