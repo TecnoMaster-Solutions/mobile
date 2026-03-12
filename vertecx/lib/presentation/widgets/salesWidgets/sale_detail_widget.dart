@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/sales/sale_item_model.dart';
 import 'package:vertecx/data/models/sales/sale_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SaleDetailWidget extends StatelessWidget {
   final SaleModel sale;
 
   const SaleDetailWidget({super.key, required this.sale});
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      debugPrint('Could not launch $urlString');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,7 @@ class SaleDetailWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 const Text(
-                  "Detalle venta",
+                  "Detalle de la venta",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
@@ -37,130 +45,202 @@ class SaleDetailWidget extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // 📋 Encabezado
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildRow("Código venta", sale.id),
-                  _buildRow(
-                    "Estado venta",
-                    sale.statusString,
-                    valueColor: sale.statusColor,
-                  ),
-                  _buildRow("Cliente", sale.clientName),
-                  _buildRow("Fecha venta", sale.formattedDate),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              "Productos y servicios",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-
             Expanded(
-              child: ListView(
-                children: [
-                  ...sale.items.map(
-                    (item) => ListTile(
-                      leading: SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: item.type == SaleItemType.product
-                            ? Image.asset("assets/icons/proteccion1.png")
-                            : Image.asset("assets/icons/tools.png"),
-                      ),
-                      title: Text(
-                        item.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        "${item.type == SaleItemType.product ? "Producto" : "Servicio"} • Cantidad: ${item.quantity}",
-                      ),
-                      trailing: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Precio",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 1. Información del cliente
+                    _buildSectionTitle("Información del cliente"),
+                    _buildCard([
+                      _buildRow("Nombre completo", sale.customer?.displayName ?? "N/A"),
+                      _buildRow("Documento", sale.customer?.documentNumber ?? "N/A"),
+                      _buildRow("Teléfono", sale.customer?.phone ?? "N/A"),
+                      _buildRow("Correo", sale.customer?.email ?? "N/A"),
+                      _buildRow("Ciudad", sale.customer?.city ?? "N/A"),
+                    ]),
+
+                    // 2. Datos de la venta
+                    _buildSectionTitle("Datos de la venta"),
+                    _buildCard([
+                      _buildRow("Número de venta", sale.id),
+                      _buildRow("Fecha", sale.formattedDate),
+                      _buildRow("Estado de venta", sale.statusString, valueColor: sale.statusColor, bold: true),
+                      _buildRow("Estado de pago", sale.paymentStatus, valueColor: sale.paymentStatusColor, bold: true),
+                      _buildRow("Método de pago", sale.paymentMethod ?? "N/A"),
+                      _buildRow("Creado por", sale.createdBy ?? "Sistema"),
+                      _buildRow("Fecha de creación", sale.createdDate ?? sale.formattedDate),
+                      _buildRow("Fecha actualización", sale.updatedDate ?? "N/A"),
+                    ]),
+
+                    // 3. Resumen de pago
+                    _buildSectionTitle("Resumen de pago"),
+                    _buildCard([
+                      _buildRow("Total", sale.formattedTotal),
+                      _buildRow("Pagado", sale.formattedPaidAmount, valueColor: Colors.green),
+                      _buildRow("Pendiente", sale.formattedPendingAmount, valueColor: Colors.red),
+                      _buildRow("Pagos reales", sale.payments.length.toString()),
+                    ]),
+
+                    // 4. Resumen general
+                    _buildSectionTitle("Resumen general"),
+                    _buildCard([
+                      _buildRow("Subtotal", sale.formattedSubtotal),
+                      _buildRow("Impuestos", sale.formattedTaxAmount),
+                      _buildRow("TOTAL FINAL", sale.formattedTotal, bold: true, big: true),
+                    ]),
+
+                    // 5. Productos y servicios
+                    _buildSectionTitle("Productos y servicios"),
+                    ...sale.items.map((item) => Card(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: ListTile(
+                            leading: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade50,
+                                borderRadius: BorderRadius.circular(8)
+                              ),
+                              child: Icon(
+                                item.type == SaleItemType.product ? Icons.inventory_2 : Icons.build,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                            title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text("${item.type == SaleItemType.product ? "Producto" : "Servicio"} • Cantidad: ${item.quantity}"),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Text("Precio unitario", style: TextStyle(color: Colors.grey, fontSize: 11)),
+                                Text(item.formattedPrice, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                              ],
                             ),
                           ),
-                          Text(
-                            item.formattedPrice,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black,
+                        )),
+
+                    // 6. Pagos registrados
+                    if (sale.payments.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      _buildSectionTitle("Pagos registrados"),
+                      ...sale.payments.map((p) => Card(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          ),
-                        ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildRow("Monto", p.formattedAmount, valueColor: Colors.green, bold: true),
+                                  _buildRow("Método", p.paymentMethod ?? "N/A"),
+                                  _buildRow("Referencia", p.reference ?? "N/A"),
+                                  _buildRow("Fecha", p.formattedDate),
+                                  if (p.invoiceUrl != null && p.invoiceUrl!.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: InkWell(
+                                        onTap: () => _launchUrl(p.invoiceUrl!),
+                                        child: const Text(
+                                          "Ver comprobante",
+                                          style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline, fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ],
+
+                    const SizedBox(height: 10),
+
+                    const Text(
+                      "Observaciones",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Text(
+                        sale.notes?.isNotEmpty == true ? sale.notes! : "Sin observaciones",
+                        style: TextStyle(color: Colors.grey.shade700),
                       ),
                     ),
-                  ),
 
-                  const Divider(),
-                  _buildRow("Subtotal", sale.formattedPrice),
-                  _buildRow("IVA (19%)", sale.formattedPrice),
-                  _buildRow("Descuento", sale.formattedPrice),
-                  _buildRow(
-                    "TOTAL",
-                    sale.formattedPrice,
-                    bold: true,
-                    big: true,
-                  ),
-                ],
-              ),
-            ),
+                    const SizedBox(height: 20),
 
-            const SizedBox(height: 10),
-
-            const Text(
-              "Observaciones",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                hintText: "Ingrese su observación",
-              ),
-              maxLines: 2,
-            ),
-
-            const SizedBox(height: 12),
-
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8A8A8A),
-                minimumSize: const Size(double.infinity, 48),
-              ),
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                "Cerrar",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF089642),
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        "Cerrar",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+      ),
+    );
+  }
+
+  Widget _buildCard(List<Widget> children) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
       ),
     );
   }
@@ -179,14 +259,17 @@ class SaleDetailWidget extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              color: valueColor ?? Colors.black,
-              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-              fontSize: big ? 18 : 16,
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: valueColor ?? Colors.black87,
+                fontWeight: bold ? FontWeight.bold : FontWeight.w500,
+                fontSize: big ? 16 : 14,
+              ),
             ),
           ),
         ],
