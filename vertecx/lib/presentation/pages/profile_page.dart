@@ -285,7 +285,8 @@ class _ProfileScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brandRed = const Color(0xFFB20000);
+    const brandGreen = Color(0xFF06A646);
+    const brandGreenDark = Color(0xFF058A3C);
     final args = ModalRoute.of(context)?.settings.arguments;
     final permissions = args is List<String>
         ? args
@@ -299,7 +300,7 @@ class _ProfileScaffold extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: const Color(0xFFF4F7F5),
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: SideMenuPanel(
@@ -332,15 +333,18 @@ class _ProfileScaffold extends StatelessWidget {
                     const Icon(
                       Icons.error_outline,
                       size: 40,
-                      color: Colors.red,
+                      color: Color(0xFFB42318),
                     ),
                     const SizedBox(height: 10),
-                    Text(c.error!, style: const TextStyle(color: Colors.red)),
+                    Text(
+                      c.error!,
+                      style: const TextStyle(color: Color(0xFFB42318)),
+                    ),
                     const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: c.load,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: brandRed,
+                        backgroundColor: brandGreen,
                       ),
                       child: const Text('Reintentar'),
                     ),
@@ -378,7 +382,7 @@ class _ProfileScaffold extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: brandRed,
+                      backgroundColor: brandGreenDark,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -402,8 +406,7 @@ class _HeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const wine = Color(0xFF5C0F0F);
-    const red = Color(0xFFB20000);
+    const brandGreenDeep = Color(0xFF04652C);
     final hasRole = profile.rol.trim().isNotEmpty;
     final hasRating = profile.rating != null;
     final hasEmpresa = (profile.empresa ?? '').trim().isNotEmpty;
@@ -412,6 +415,7 @@ class _HeaderCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Color(0xFFD7E2DA)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x14000000),
@@ -425,7 +429,7 @@ class _HeaderCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 34,
-            backgroundColor: const Color(0xFFE8E8E8),
+            backgroundColor: const Color(0xFFE8F6EE),
             backgroundImage: (profile.avatarUrl.isNotEmpty)
                 ? NetworkImage(profile.avatarUrl)
                 : null,
@@ -435,7 +439,7 @@ class _HeaderCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: wine,
+                      color: brandGreenDeep,
                     ),
                   )
                 : null,
@@ -450,7 +454,7 @@ class _HeaderCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: wine,
+                    color: brandGreenDeep,
                   ),
                 ),
                 if (hasRole || hasRating)
@@ -460,16 +464,16 @@ class _HeaderCard extends StatelessWidget {
                       if (hasRole)
                         _Chip(
                           text: profile.rol,
-                          bg: const Color(0xFFFFF1F1),
-                          fg: red,
+                          bg: const Color(0xFFE8F6EE),
+                          fg: brandGreenDeep,
                           icon: Icons.verified_user_outlined,
                         ),
                       if (hasRole && hasRating) const SizedBox(width: 8),
                       if (hasRating)
                         _Chip(
                           text: profile.rating!.toStringAsFixed(1),
-                          bg: const Color(0xFFF8FAFC),
-                          fg: wine,
+                          bg: const Color(0xFFF4FBF6),
+                          fg: brandGreenDeep,
                           icon: Icons.star_rate_rounded,
                         ),
                     ],
@@ -540,7 +544,7 @@ class _StatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const wine = Color(0xFF5C0F0F);
+    const brandGreenDeep = Color(0xFF04652C);
 
     Widget stat(String label, String value, IconData icon) {
       return Container(
@@ -548,6 +552,7 @@ class _StatsGrid extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Color(0xFFD7E2DA)),
           boxShadow: const [
             BoxShadow(
               color: Color(0x10000000),
@@ -558,7 +563,7 @@ class _StatsGrid extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 24, color: wine),
+            Icon(icon, size: 24, color: brandGreenDeep),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -568,7 +573,7 @@ class _StatsGrid extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: wine,
+                    color: brandGreenDeep,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -618,7 +623,7 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const wine = Color(0xFF5C0F0F);
+    const brandGreenDeep = Color(0xFF04652C);
 
     Widget row(
       IconData icon,
@@ -632,7 +637,7 @@ class _InfoCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             children: [
-              Icon(icon, size: 22, color: wine),
+              Icon(icon, size: 22, color: brandGreenDeep),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -692,6 +697,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Color(0xFFD7E2DA)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x14000000),

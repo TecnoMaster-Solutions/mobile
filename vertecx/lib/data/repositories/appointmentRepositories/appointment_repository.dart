@@ -205,8 +205,10 @@ class AppointmentRepository {
   }
 
   static String _formatCurrency(int value) {
-    final formatter = NumberFormat.simpleCurrency(
+    final formatter = NumberFormat.currency(
       locale: 'es_CO',
+      name: 'COP',
+      symbol: 'COP ',
       decimalDigits: 0,
     );
     return formatter.format(value);

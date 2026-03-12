@@ -12,6 +12,13 @@ class NavigationHelper {
     if (perms.contains('appointments.read')) {
       return AppRoutes.techHub;
     }
+    if (perms.contains('sales.read') ||
+        perms.contains('customers.read') ||
+        perms.contains('servicesrequest.read') ||
+        perms.contains('quotes.read') ||
+        perms.contains('orderservices.read')) {
+      return AppRoutes.salesHub;
+    }
     return AppRoutes.adminHome;
   }
 
