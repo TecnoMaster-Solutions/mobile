@@ -10,6 +10,7 @@ import 'package:vertecx/presentation/widgets/techniciansWidgets/technicians_card
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_bloc.dart';
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_event.dart';
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_state.dart';
+import 'package:vertecx/presentation/themes/app_colors.dart';
 
 class TechniciansPage extends StatefulWidget {
   const TechniciansPage({super.key});
@@ -114,7 +115,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
               child: Column(
                 children: [
                   Buscar(
-                    hintText: "Buscar tÃ©cnico...",
+                    hintText: "Buscar técnico...",
                     onChanged: (v) => setState(() => _searchQuery = v),
                   ),
                   const SizedBox(height: 20),
@@ -123,9 +124,9 @@ class _TechniciansPageState extends State<TechniciansPage> {
                     ...page.map((t) => TechnicianCardWidget(technician: t))
                   else
                     const Text(
-                      "No se encontraron tÃ©cnicos",
+                      "No se encontraron técnicos",
                       style: TextStyle(
-                        color: Color(0xFFB20000),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -145,16 +146,16 @@ class _TechniciansPageState extends State<TechniciansPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
-                                  "Cargar mÃ¡s tÃ©cnicos",
-                                  style: TextStyle(color: Color(0xFFB20000)),
+                                  "Cargar más técnicos",
+                                  style: TextStyle(color: AppColors.primary),
                                 ),
                               ],
                             ),
                           )
                         : const Text(
-                            "Ya estÃ¡n todos los tÃ©cnicos",
+                            "Ya están todos los técnicos",
                             style: TextStyle(
-                              color: Color(0xFFB20000),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

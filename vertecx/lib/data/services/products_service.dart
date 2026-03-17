@@ -4,15 +4,33 @@ import 'dart:io';
 import 'package:vertecx/core/api_http.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/constants/api_constants.dart';
-import 'package:vertecx/data/models/products/product_model.dart';
+import 'package:vertecx/data/models/products/products_paginated_response.dart';
 
 class ProductsService {
-  Future<List<ProductModel>> getProducts({
+  Future<ProductsPaginatedResponse> getProducts({
     String status = 'all',
     String? token,
+    int page = 1,
+    int limit = 50,
+    String? search,
+    int? categoryId,
   }) async {
+    final queryParams = <String, String>{
+      'status': status,
+      'page': page.toString(),
+      'limit': limit.toString(),
+    };
+
+    if (search != null && search.trim().isNotEmpty) {
+      queryParams['search'] = search.trim();
+    }
+
+    if (categoryId != null) {
+      queryParams['categoryid'] = categoryId.toString();
+    }
+
     final uri = Uri.parse('$kBackendBaseUrl/products')
-        .replace(queryParameters: {'status': status});
+        .replace(queryParameters: queryParams);
 
     final effectiveToken = token ?? SessionContext.accessToken;
 
@@ -34,16 +52,13 @@ class ProductsService {
 
       final decoded = jsonDecode(response.body);
 
-      if (decoded is! List) {
+      if (decoded is! Map<String, dynamic>) {
         throw Exception(
-          'Respuesta inválida del backend (se esperaba lista).',
+          'Respuesta inválida del backend (se esperaba objeto con data y meta).',
         );
       }
 
-      return decoded
-          .whereType<Map<String, dynamic>>()
-          .map(ProductModel.fromJson)
-          .toList();
+      return ProductsPaginatedResponse.fromJson(decoded);
     } on SocketException {
       throw Exception('Sin conexión. Verifica red/IP del backend.');
     } catch (e) {

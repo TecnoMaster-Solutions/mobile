@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/purchases/purchase_model.dart';
+import 'package:vertecx/presentation/widgets/purchasesWidgets/purchase_detail_widget.dart';
 
 class PurchaseCardWidget extends StatelessWidget {
   final PurchaseModel compra;
@@ -17,16 +18,14 @@ class PurchaseCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🔹 Encabezado: Código y total
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Código OC y factura
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      compra.id,
+                      compra.orderNumber,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -76,7 +75,6 @@ class PurchaseCardWidget extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // 🔹 Estado + Iconos
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -102,14 +100,23 @@ class PurchaseCardWidget extends StatelessWidget {
 
                 // Íconos (ver detalle y acción secundaria)
                 Row(
-                  children: const [
-                    Icon(
-                      Icons.remove_red_eye_outlined,
-                      size: 20,
-                      color: Colors.black54,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) =>
+                              PurchaseDetailWidget(purchaseId: compra.id),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.remove_red_eye_outlined,
+                        size: 20,
+                        color: Colors.black54,
+                      ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.more_horiz, size: 20, color: Colors.black54),
                   ],
                 ),
               ],

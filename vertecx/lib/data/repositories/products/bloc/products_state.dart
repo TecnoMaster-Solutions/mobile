@@ -8,7 +8,18 @@ class ProductsLoading extends ProductsState {}
 
 class ProductsLoaded extends ProductsState {
   final List<ProductModel> products;
-  ProductsLoaded(this.products);
+  final int total;
+  final int page;
+  final int limit;
+  final int totalPages;
+
+  ProductsLoaded({
+    required this.products,
+    required this.total,
+    required this.page,
+    required this.limit,
+    required this.totalPages,
+  });
 }
 
 class ProductsError extends ProductsState {

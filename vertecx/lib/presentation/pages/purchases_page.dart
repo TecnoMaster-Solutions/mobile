@@ -1,8 +1,10 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:vertecx/data/models/purchases/purchase_model.dart';
+import 'package:vertecx/data/repositories/purchases/purchases_repository.dart';
+import 'package:vertecx/presentation/widgets/components/search/search.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/purchasesWidgets/purchase_card_widget.dart';
-import 'package:vertecx/presentation/widgets/components/search/search.dart';
-import 'package:vertecx/data/mocks/purchases_mock_data.dart';
+
 class PurchasesPage extends StatefulWidget {
   const PurchasesPage({super.key});
 
@@ -12,17 +14,40 @@ class PurchasesPage extends StatefulWidget {
 
 class _PurchasesPageState extends State<PurchasesPage> {
   final ScrollController _scrollController = ScrollController();
-  int _purchasesToShow = 4; // cantidad inicial de compras
-  String _searchQuery = "";
+  final PurchasesRepository _repository = PurchasesRepository();
 
-  // ðŸ”¹ Cargar mÃ¡s registros
-  void _loadMorePurchases() {
+  int _purchasesToShow = 4;
+  String _searchQuery = "";
+  late Future<List<PurchaseModel>> _futurePurchases;
+
+  @override
+  void initState() {
+    super.initState();
+    _futurePurchases = _loadPurchases();
+  }
+
+  Future<List<PurchaseModel>> _loadPurchases() async {
+    final response = await _repository.fetchPurchases(
+      page: 1,
+      limit: 50,
+      search: _searchQuery.trim().isEmpty ? null : _searchQuery.trim(),
+    );
+    return response.data;
+  }
+
+  void _refreshPurchases() {
     setState(() {
-      _purchasesToShow = (_purchasesToShow + 2).clamp(0, mockPurchases.length);
+      _purchasesToShow = 4;
+      _futurePurchases = _loadPurchases();
     });
   }
 
-  // ðŸ”¹ Subir al inicio
+  void _loadMorePurchases(int max) {
+    setState(() {
+      _purchasesToShow = (_purchasesToShow + 2).clamp(0, max);
+    });
+  }
+
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -33,93 +58,108 @@ class _PurchasesPageState extends State<PurchasesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ðŸ”Ž Filtrar compras por proveedor o ID
-    final filteredPurchases = mockPurchases.where((p) {
-      final query = _searchQuery.toLowerCase();
-      return p.proveedor.toLowerCase().contains(query) ||
-          p.id.toLowerCase().contains(query) ||
-          p.factura.toLowerCase().contains(query);
-    }).toList();
-
-    // PaginaciÃ³n
-    final purchases = filteredPurchases.take(_purchasesToShow).toList();
-    final allPurchasesLoaded = _purchasesToShow >= filteredPurchases.length;
-
     return Scaffold(
-      appBar: const AppTopBar(),
+      appBar: const AppTopBar(title: 'Compras', showMenu: true),
       backgroundColor: const Color(0xFFE8E8E8),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+          Buscar(
+            hintText: "Buscar proveedor, orden o factura...",
+            onChanged: (value) {
+              _searchQuery = value;
+              _refreshPurchases();
+            },
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: FutureBuilder<List<PurchaseModel>>(
+              future: _futurePurchases,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-            // ðŸ”Ž Buscador
-            Buscar(
-              hintText: "Buscar proveedor, OC o factura...",
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-            ),
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        snapshot.error.toString(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Color(0xFFB20000),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-            const SizedBox(height: 20),
+                final purchases = snapshot.data ?? [];
+                final visiblePurchases =
+                    purchases.take(_purchasesToShow).toList();
+                final allPurchasesLoaded =
+                    _purchasesToShow >= purchases.length;
 
-            // ðŸ“‹ Lista de compras
-            if (purchases.isNotEmpty)
-              ...purchases.map((p) => PurchaseCardWidget(compra: p))
-            else
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Text(
-                  "No se encontraron compras",
-                  style: TextStyle(
-                    color: Color(0xFFB20000),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-            const SizedBox(height: 20),
-
-            // ðŸ”½ BotÃ³n cargar mÃ¡s o mensaje final
-            if (filteredPurchases.isNotEmpty)
-              if (!allPurchasesLoaded)
-                TextButton(
-                  onPressed: _loadMorePurchases,
+                return SingleChildScrollView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(bottom: 90),
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/icons/Vector.png",
-                        width: 20,
-                        height: 20,
-                      ),
-                      const Text(
-                        "Cargar mÃ¡s compras",
-                        style: TextStyle(color: Color(0xFFB20000)),
-                      ),
+                      if (visiblePurchases.isNotEmpty)
+                        ...visiblePurchases
+                            .map((p) => PurchaseCardWidget(compra: p))
+                      else
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            "No se encontraron compras",
+                            style: TextStyle(
+                              color: Color(0xFFB20000),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      if (purchases.isNotEmpty)
+                        if (!allPurchasesLoaded)
+                          TextButton(
+                            onPressed: () => _loadMorePurchases(purchases.length),
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  "assets/icons/Vector.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                const Text(
+                                  "Cargar más compras",
+                                  style: TextStyle(color: Color(0xFF089642)),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Ya están todas las compras",
+                              style: TextStyle(
+                                color: Color(0xFF089642),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      const SizedBox(height: 40),
                     ],
                   ),
-                )
-              else
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "Ya estÃ¡n todas las compras",
-                    style: TextStyle(
-                      color: Color(0xFFB20000),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-            const SizedBox(height: 40),
-          ],
-        ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
-
-      // â¬†ï¸ BotÃ³n flotante para subir
       floatingActionButton: FloatingActionButton(
         onPressed: _scrollToTop,
         backgroundColor: const Color(0xFF089642),
@@ -128,4 +168,3 @@ class _PurchasesPageState extends State<PurchasesPage> {
     );
   }
 }
-

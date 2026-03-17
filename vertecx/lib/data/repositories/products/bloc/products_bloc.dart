@@ -10,8 +10,24 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<LoadProductsEvent>((event, emit) async {
       emit(ProductsLoading());
       try {
-        final products = await repo.fetchProducts(status: 'all');
-        emit(ProductsLoaded(products));
+        final response = await repo.fetchProducts(
+          status: event.status,
+          token: event.token,
+          page: event.page,
+          limit: event.limit,
+          search: event.search,
+          categoryId: event.categoryId,
+        );
+
+        emit(
+          ProductsLoaded(
+            products: response.data,
+            total: response.meta.total,
+            page: response.meta.page,
+            limit: response.meta.limit,
+            totalPages: response.meta.totalPages,
+          ),
+        );
       } catch (e) {
         emit(ProductsError(e.toString()));
       }
