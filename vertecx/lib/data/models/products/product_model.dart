@@ -2,6 +2,22 @@ import 'package:intl/intl.dart';
 
 enum ProductStatus { activo, inactivo }
 
+class ProductCategoryModel {
+  final int? id;
+  final String name;
+
+  ProductCategoryModel({this.id, required this.name});
+
+  factory ProductCategoryModel.fromJson(Map<String, dynamic> json) {
+    return ProductCategoryModel(
+      id: json['id'] is int
+          ? json['id']
+          : int.tryParse(json['id']?.toString() ?? ''),
+      name: (json['name'] ?? '').toString().trim(),
+    );
+  }
+}
+
 class ProductModel {
   final int id;
   final String name;
@@ -13,8 +29,9 @@ class ProductModel {
 
   final String description;
   final String imageUrl;
+  final List<String> images;
 
-  final String? category;
+  final ProductCategoryModel? category;
   final int? categoryId;
 
   final int? stock;
@@ -28,6 +45,7 @@ class ProductModel {
     required this.price,
     required this.description,
     required this.imageUrl,
+    required this.images,
     this.priceOfSale,
     this.priceOfSupplier,
     this.category,
@@ -37,7 +55,8 @@ class ProductModel {
     this.supplierCategory,
   });
 
-  String get statusString => status == ProductStatus.activo ? "Activo" : "Inactivo";
+  String get statusString =>
+      status == ProductStatus.activo ? "Activo" : "Inactivo";
 
   String get formattedPrice {
     final formatter = NumberFormat.currency(
@@ -62,9 +81,17 @@ class ProductModel {
     return stock! > 0 ? "$stock" : "Agotado";
   }
 
+  String get categoryName => category?.name ?? "N/A";
+
   static int _asInt(dynamic v) {
     if (v is int) return v;
     return int.tryParse(v?.toString() ?? '') ?? 0;
+  }
+
+  static int? _asNullableInt(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    return int.tryParse(v.toString());
   }
 
   static double _asDouble(dynamic v) {
@@ -75,22 +102,38 @@ class ProductModel {
 
   static String _asString(dynamic v) => (v ?? '').toString();
 
+  static List<String> _asStringList(dynamic v) {
+    if (v is List) {
+      return v
+          .map((e) => (e ?? '').toString().trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+    return <String>[];
+  }
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final isActive = json['isactive'] == true;
 
     final sale = json['productpriceofsale'];
     final supplier = json['productpriceofsupplier'];
 
-    final double? salePrice = (sale == null) ? null : _asDouble(sale);
-    final double? supplierPrice = (supplier == null) ? null : _asDouble(supplier);
+    final double? salePrice = sale == null ? null : _asDouble(sale);
+    final double? supplierPrice = supplier == null ? null : _asDouble(supplier);
 
     final effectivePrice = salePrice ?? supplierPrice ?? 0.0;
 
-    String? categoryName;
+    ProductCategoryModel? parsedCategory;
     final cat = json['category'];
     if (cat is Map<String, dynamic>) {
-      categoryName = (cat['name'] ?? cat['categoryname'] ?? cat['nombre'])?.toString();
+      parsedCategory = ProductCategoryModel.fromJson(cat);
     }
+
+    final parsedImages = _asStringList(json['images']);
+    final mainImage = _asString(json['image']).trim();
+    final resolvedImages = parsedImages.isNotEmpty
+        ? parsedImages
+        : (mainImage.isNotEmpty ? [mainImage] : <String>[]);
 
     return ProductModel(
       id: _asInt(json['productid']),
@@ -99,10 +142,11 @@ class ProductModel {
       price: effectivePrice,
       priceOfSale: salePrice,
       priceOfSupplier: supplierPrice,
-      description: (json['productdescription'] ?? '').toString(),
-      imageUrl: _asString(json['image']).trim(),
-      category: categoryName,
-      categoryId: json['categoryid'] == null ? null : _asInt(json['categoryid']),
+      description: (json['productdescription'] ?? '').toString().trim(),
+      imageUrl: resolvedImages.isNotEmpty ? resolvedImages.first : '',
+      images: resolvedImages,
+      category: parsedCategory,
+      categoryId: _asNullableInt(json['categoryid']),
       stock: json['productstock'] == null ? null : _asInt(json['productstock']),
       code: json['productcode']?.toString(),
       supplierCategory: json['suppliercategory']?.toString(),
