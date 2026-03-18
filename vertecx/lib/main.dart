@@ -300,8 +300,18 @@ class _SessionBootstrapPageState extends State<SessionBootstrapPage> {
       final permissions = rawPermissions is List
           ? rawPermissions.map((e) => e.toString()).toList()
           : const <String>[];
+      final userId =
+          decoded['userid'] is int
+              ? decoded['userid'] as int
+              : int.tryParse('${decoded['userid'] ?? ''}');
+      final roleName = (decoded['rolename'] ?? '').toString().trim();
 
       SessionContext.permissions = permissions;
+      if (userId != null && roleName.isNotEmpty) {
+        SessionContext.setUser(userId: userId, roleName: roleName);
+      } else if (roleName.isNotEmpty) {
+        SessionContext.roleName = roleName;
+      }
 
       if (!mounted) return;
       NavigationHelper.goToLanding(context, permissions: permissions);

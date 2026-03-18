@@ -249,7 +249,7 @@ class _AppSideMenuPanelState extends State<AppSideMenuPanel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            'Vertecx',
+                            'Tecnomaster',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
