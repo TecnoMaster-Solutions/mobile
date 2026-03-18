@@ -140,7 +140,39 @@ class SaleModel {
 
   String get clientName => customer?.displayName ?? "Cliente #$customerId";
 
-  String get statusString => status;
+  String get statusString {
+    switch (status.toLowerCase().trim()) {
+      case 'cancelled':
+      case 'cancelado':
+        return 'Cancelado';
+      case 'pending':
+      case 'pendiente':
+        return 'Pendiente';
+      case 'completed':
+      case 'finalizado':
+        return 'Finalizado';
+      default:
+        return status;
+    }
+  }
+
+  String get paymentStatusString {
+    switch (paymentStatus.toLowerCase().trim()) {
+      case 'cancelled':
+      case 'cancelado':
+        return 'Cancelado';
+      case 'pending':
+      case 'pendiente':
+        return 'Pendiente';
+      case 'completed':
+      case 'finalizado':
+      case 'paid':
+      case 'pagado':
+        return 'Finalizado';
+      default:
+        return paymentStatus;
+    }
+  }
 
   Color get statusColor {
     switch (status.toLowerCase()) {
