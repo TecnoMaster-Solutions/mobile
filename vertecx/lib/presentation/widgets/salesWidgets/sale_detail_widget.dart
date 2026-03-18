@@ -66,7 +66,7 @@ class SaleDetailWidget extends StatelessWidget {
                       _buildRow("Número de venta", sale.id),
                       _buildRow("Fecha", sale.formattedDate),
                       _buildRow("Estado de venta", sale.statusString, valueColor: sale.statusColor, bold: true),
-                      _buildRow("Estado de pago", sale.paymentStatus, valueColor: sale.paymentStatusColor, bold: true),
+                      _buildRow("Estado de pago", sale.paymentStatusString, valueColor: sale.paymentStatusColor, bold: true),
                       _buildRow("Método de pago", sale.paymentMethod ?? "N/A"),
                       _buildRow("Creado por", sale.createdBy ?? "Sistema"),
                       _buildRow("Fecha de creación", sale.createdDate ?? sale.formattedDate),
