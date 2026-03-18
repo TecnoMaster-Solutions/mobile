@@ -10,10 +10,18 @@ class SessionContext {
   static const String _accessKey = 'session_access_token';
   static const String _refreshKey = 'session_refresh_token';
   static const String _permissionsKey = 'session_permissions';
+  static const String _userIdKey = 'session_user_id';
+  static const String _roleNameKey = 'session_role_name';
+  static const String _customerIdKey = 'session_customer_id';
+  static const String _technicianIdKey = 'session_technician_id';
 
   static List<String> _permissions = const <String>[];
   static String? _accessToken;
   static String? _refreshToken;
+  static int? _userId;
+  static String? _roleName;
+  static int? _customerId;
+  static int? _technicianId;
   static bool _isHydrated = false;
   static Future<void>? _hydrateInFlight;
 
@@ -51,11 +59,86 @@ class SessionContext {
     return normalized.isEmpty ? null : normalized;
   }
 
+  static int? get userId => _userId;
+  static set userId(int? value) {
+    _userId = value;
+    unawaited(_persistInt(_userIdKey, value));
+  }
+
+  static String? get roleName => _roleName;
+  static set roleName(String? value) {
+    _roleName = value?.trim().isEmpty ?? true ? null : value?.trim();
+    unawaited(_persistString(_roleNameKey, _roleName));
+  }
+
+  static int? get customerId => _customerId;
+  static set customerId(int? value) {
+    _customerId = value;
+    unawaited(_persistInt(_customerIdKey, value));
+  }
+
+  static int? get technicianId => _technicianId;
+  static set technicianId(int? value) {
+    _technicianId = value;
+    unawaited(_persistInt(_technicianIdKey, value));
+  }
+
+  static String get normalizedRoleName {
+    return _normalizeRole(_roleName ?? '');
+  }
+
+  static String _legacyNormalizeRole(String value) {
+    return value
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u');
+  }
+
+  static bool get isClientRole {
+    final role = normalizedRoleName;
+    return role == 'cliente' || role == 'client' || role == 'customer';
+  }
+
+  static bool get isTechnicianRole {
+    final role = normalizedRoleName;
+    return role == 'tecnico' || role == 'technician' || role == 'technical';
+  }
+
+  static String _normalizeRole(String value) {
+    return value
+        .toLowerCase()
+        .trim()
+        .replaceAll('\u00E1', 'a')
+        .replaceAll('\u00E9', 'e')
+        .replaceAll('\u00ED', 'i')
+        .replaceAll('\u00F3', 'o')
+        .replaceAll('\u00FA', 'u')
+        .replaceAll('\u00F1', 'n')
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ñ', 'n')
+        .replaceAll('Ã¡', 'a')
+        .replaceAll('Ã©', 'e')
+        .replaceAll('Ã­', 'i')
+        .replaceAll('Ã³', 'o')
+        .replaceAll('Ãº', 'u')
+        .replaceAll('Ã±', 'n');
+  }
+
   static Future<void> hydrateFromStorage() async {
     bool hadStorageError = false;
     String? access;
     String? refresh;
     String? rawPermissions;
+    String? rawUserId;
+    String? rawRoleName;
+    String? rawCustomerId;
+    String? rawTechnicianId;
 
     try {
       access = await _storage.read(_accessKey);
@@ -75,6 +158,30 @@ class SessionContext {
       hadStorageError = true;
     }
 
+    try {
+      rawUserId = await _storage.read(_userIdKey);
+    } catch (_) {
+      hadStorageError = true;
+    }
+
+    try {
+      rawRoleName = await _storage.read(_roleNameKey);
+    } catch (_) {
+      hadStorageError = true;
+    }
+
+    try {
+      rawCustomerId = await _storage.read(_customerIdKey);
+    } catch (_) {
+      hadStorageError = true;
+    }
+
+    try {
+      rawTechnicianId = await _storage.read(_technicianIdKey);
+    } catch (_) {
+      hadStorageError = true;
+    }
+
     if (hadStorageError) {
       await _clearPersistedSessionSafely();
     }
@@ -82,6 +189,13 @@ class SessionContext {
     _accessToken = (access == null || access.isEmpty) ? null : access;
     _refreshToken = (refresh == null || refresh.isEmpty) ? null : refresh;
     _permissions = _parsePermissions(rawPermissions);
+    _userId = _parseInt(rawUserId);
+    _roleName =
+        (rawRoleName == null || rawRoleName.trim().isEmpty)
+            ? null
+            : rawRoleName.trim();
+    _customerId = _parseInt(rawCustomerId);
+    _technicianId = _parseInt(rawTechnicianId);
     _isHydrated = true;
   }
 
@@ -109,12 +223,37 @@ class SessionContext {
     unawaited(_persistRefreshToken());
   }
 
+  static void setUser({
+    required int userId,
+    required String roleName,
+    int? customerId,
+    int? technicianId,
+  }) {
+    _isHydrated = true;
+    _userId = userId;
+    _roleName = roleName.trim().isEmpty ? null : roleName.trim();
+    _customerId = customerId;
+    _technicianId = technicianId;
+    unawaited(_persistInt(_userIdKey, _userId));
+    unawaited(_persistString(_roleNameKey, _roleName));
+    unawaited(_persistInt(_customerIdKey, _customerId));
+    unawaited(_persistInt(_technicianIdKey, _technicianId));
+  }
+
   static void clearAuth() {
     _isHydrated = true;
     _accessToken = null;
     _refreshToken = null;
+    _userId = null;
+    _roleName = null;
+    _customerId = null;
+    _technicianId = null;
     unawaited(_safeDelete(_accessKey));
     unawaited(_safeDelete(_refreshKey));
+    unawaited(_safeDelete(_userIdKey));
+    unawaited(_safeDelete(_roleNameKey));
+    unawaited(_safeDelete(_customerIdKey));
+    unawaited(_safeDelete(_technicianIdKey));
   }
 
   static void clearAll() {
@@ -152,6 +291,26 @@ class SessionContext {
     await _safeDelete(_accessKey);
     await _safeDelete(_refreshKey);
     await _safeDelete(_permissionsKey);
+    await _safeDelete(_userIdKey);
+    await _safeDelete(_roleNameKey);
+    await _safeDelete(_customerIdKey);
+    await _safeDelete(_technicianIdKey);
+  }
+
+  static Future<void> _persistString(String key, String? value) async {
+    if (value == null || value.isEmpty) {
+      await _safeDelete(key);
+      return;
+    }
+    await _safeWrite(key, value);
+  }
+
+  static Future<void> _persistInt(String key, int? value) async {
+    if (value == null) {
+      await _safeDelete(key);
+      return;
+    }
+    await _safeWrite(key, value.toString());
   }
 
   static Future<void> _safeWrite(String key, String value) async {
@@ -208,5 +367,12 @@ class SessionContext {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value.trim());
     return null;
+  }
+
+  static int? _parseInt(String? raw) {
+    if (raw == null || raw.trim().isEmpty) {
+      return null;
+    }
+    return int.tryParse(raw.trim());
   }
 }

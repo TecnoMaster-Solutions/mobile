@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/users/user_model.dart';
@@ -100,6 +100,7 @@ class UserListPageState extends State<UserListPage> {
               onClose: () => Navigator.of(context).maybePop(),
               onLogout: () {
                 Navigator.of(context).maybePop();
+                SessionContext.clearAll();
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   AppRoutes.login,
                   (route) => false,
@@ -167,7 +168,7 @@ class UserListPageState extends State<UserListPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Botón para cargar más
+                        // Bot�n para cargar m�s
                         if (filteredUsers.isNotEmpty)
                           if (!allUsersLoaded)
                             TextButton(
@@ -182,7 +183,7 @@ class UserListPageState extends State<UserListPage> {
                                     color: const Color(0xFF089642),
                                   ),
                                   const Text(
-                                    "Cargar más Usuarios",
+                                    "Cargar m�s Usuarios",
                                     style: TextStyle(color: Color(0xFF089642)),
                                   ),
                                 ],
@@ -192,7 +193,7 @@ class UserListPageState extends State<UserListPage> {
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                "Ya están todos los usuarios",
+                                "Ya est�n todos los usuarios",
                                 style: TextStyle(
                                   color: Color(0xFF089642),
                                   fontWeight: FontWeight.bold,
@@ -231,4 +232,5 @@ class UserListPageState extends State<UserListPage> {
     );
   }
 }
+
 

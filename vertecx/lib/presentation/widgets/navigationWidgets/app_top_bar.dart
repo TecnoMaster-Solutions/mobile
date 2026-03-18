@@ -70,7 +70,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       case AppRoutes.purchaseOrders:
         return 'Orden de Compra';
       default:
-        return 'Sistemas PC';
+        return 'Tecnomaster';
     }
   }
 

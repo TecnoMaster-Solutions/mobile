@@ -1,3 +1,4 @@
+import 'package:vertecx/core/session_user_scope.dart';
 import 'package:vertecx/data/constants/api_constants.dart';
 import 'package:vertecx/data/models/orderServices/order_service_history_model.dart';
 import 'package:vertecx/data/models/orderServices/order_service_models.dart';
@@ -10,7 +11,16 @@ class OrderRepository {
   final OrderServicesService _service;
 
   Future<List<OrderService>> getAll() async {
-    final data = await _service.getOrders();
+    final scope = await SessionUserScopeResolver.resolve();
+    final query = <String, dynamic>{};
+
+    if (scope.isClientRole && scope.customerId != null) {
+      query['clientId'] = scope.customerId;
+    } else if (scope.isTechnicianRole && scope.technicianId != null) {
+      query['technicianId'] = scope.technicianId;
+    }
+
+    final data = await _service.getOrders(query: query);
     final orders = data.map(OrderService.fromJson).toList();
     orders.sort((a, b) {
       final byDate = b.fechaCreacion.compareTo(a.fechaCreacion);

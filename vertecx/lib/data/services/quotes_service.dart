@@ -7,8 +7,16 @@ import 'package:vertecx/data/models/quotes/quote_model.dart';
 class QuotesService {
   const QuotesService();
 
-  Future<List<QuoteModel>> fetchQuotes() async {
-    final Uri uri = Uri.parse('$kBackendBaseUrl/quotes');
+  Future<List<QuoteModel>> fetchQuotes({Map<String, dynamic>? query}) async {
+    final Uri baseUri = Uri.parse('$kBackendBaseUrl/quotes');
+    final Uri uri =
+        query == null || query.isEmpty
+            ? baseUri
+            : baseUri.replace(
+                queryParameters: query.map(
+                  (key, value) => MapEntry(key, value.toString()),
+                ),
+              );
     final response = await ApiHttp.get(
       uri,
       headers: const {'Accept': 'application/json'},

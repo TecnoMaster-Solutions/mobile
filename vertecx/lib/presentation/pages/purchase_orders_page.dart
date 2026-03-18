@@ -1,4 +1,6 @@
-锘縤mport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:vertecx/core/session_context.dart';
+import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/data/repositories/purchases/purchase_order_repository.dart';
 import 'package:vertecx/data/models/purchases/purchase_order_model.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
@@ -107,7 +109,10 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+            SessionContext.clearAll();
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           },
         ),
       ),
@@ -123,7 +128,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               children: [
                 const SizedBox(height: 20),
                 Buscar(
-                  hintText: "Buscar 贸rdenes...",
+                  hintText: "Buscar 髍denes...",
                   onChanged: _filterOrders,
                 ),
                 const SizedBox(height: 20),
@@ -148,7 +153,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      "No se encontraron 贸rdenes",
+                      "No se encontraron 髍denes",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
@@ -172,7 +177,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                             height: 20,
                           ),
                           const Text(
-                            "Cargar m谩s 贸rdenes",
+                            "Cargar m醩 髍denes",
                             style: TextStyle(color: Color(0xFFB20000)),
                           ),
                         ],
@@ -182,7 +187,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        "Ya est谩n todas las 贸rdenes",
+                        "Ya est醤 todas las 髍denes",
                         style: TextStyle(
                           color: Color(0xFFB20000),
                           fontWeight: FontWeight.bold,
@@ -204,4 +209,5 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
     );
   }
 }
+
 

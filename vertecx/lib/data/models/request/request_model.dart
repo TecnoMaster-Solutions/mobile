@@ -12,6 +12,7 @@ class ServiceRequestModel {
   final Map<String, dynamic>? state;
   final Map<String, dynamic>? service;
   final Map<String, dynamic>? customer;
+  final List<Map<String, dynamic>> techniciansMap;
 
   ServiceRequestModel({
     required this.serviceRequestId,
@@ -27,7 +28,34 @@ class ServiceRequestModel {
     required this.state,
     required this.service,
     required this.customer,
+    this.techniciansMap = const [],
   });
+
+  List<int> get technicianIds {
+    return techniciansMap
+        .map((item) => item['technicianId'] ?? item['technicianid'])
+        .map(_asInt)
+        .whereType<int>()
+        .toList();
+  }
+
+  List<String> get technicianNames {
+    return techniciansMap
+        .map((item) => _asMap(item['technician']))
+        .whereType<Map<String, dynamic>>()
+        .map((technician) {
+          final user = _asMap(technician['users']);
+          final first = (user?['name'] ?? '').toString().trim();
+          final last = (user?['lastname'] ?? '').toString().trim();
+          final fullName = [first, last].where((part) => part.isNotEmpty).join(' ');
+          if (fullName.isNotEmpty) return fullName;
+          return (technician['name'] ?? technician['fullname'] ?? '')
+              .toString()
+              .trim();
+        })
+        .where((name) => name.isNotEmpty)
+        .toList();
+  }
 
   String get customerName {
     final c = customer;
@@ -91,6 +119,29 @@ class ServiceRequestModel {
           asMap(j['client']) ??
           asMap(j['customerData']) ??
           asMap(j['clientData']),
+      techniciansMap: ((j['techniciansMap'] ?? j['techniciansmap']) as List<dynamic>? ?? const [])
+          .whereType<Map>()
+          .map(
+            (item) => item.map(
+              (key, value) => MapEntry(key.toString(), value),
+            ),
+          )
+          .toList(),
     );
+  }
+
+  static int? _asInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
+
+  static Map<String, dynamic>? _asMap(dynamic value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), val));
+    }
+    return null;
   }
 }

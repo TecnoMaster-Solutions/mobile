@@ -39,13 +39,12 @@ class AuthService {
       throw Exception('Credenciales invalidas');
     }
 
-    final String normalizedEmail = rawEmail.toLowerCase();
     final Uri loginUri = Uri.parse('$_baseUrl$_loginPath');
 
     final loginRes = await ApiHttp.post(
       loginUri,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': normalizedEmail, 'password': password}),
+      body: jsonEncode({'email': rawEmail, 'password': password}),
     );
 
     if (loginRes.statusCode != 200 && loginRes.statusCode != 201) {
@@ -154,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final User user = await AuthService.signIn(_email.text, _pass.text);
       SessionContext.permissions = user.permissions;
+      SessionContext.setUser(userId: user.id, roleName: user.roleName);
       if (!mounted) {
         return;
       }

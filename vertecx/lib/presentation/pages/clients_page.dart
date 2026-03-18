@@ -1,4 +1,6 @@
-Ôªøimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:vertecx/core/session_context.dart';
+import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/side_menu_panel.dart';
 import '../widgets/components/search/search.dart';
@@ -108,8 +110,10 @@ class _ClientsPageState extends State<ClientsPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
-            // SessionContext.clearAll(); // Import needed
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+            SessionContext.clearAll();
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           },
         ),
       ),
@@ -170,7 +174,7 @@ class _ClientsPageState extends State<ClientsPage> {
                           height: 20,
                         ),
                         const Text(
-                          "Cargar m√°s clientes",
+                          "Cargar m·s clientes",
                           style: TextStyle(color: Color(0xFFB20000)),
                         ),
                       ],
@@ -180,7 +184,7 @@ class _ClientsPageState extends State<ClientsPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "Ya est√°n todos los clientes",
+                      "Ya est·n todos los clientes",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
@@ -202,4 +206,5 @@ class _ClientsPageState extends State<ClientsPage> {
     );
   }
 }
+
 

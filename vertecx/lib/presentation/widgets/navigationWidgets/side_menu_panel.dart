@@ -270,7 +270,7 @@ class _SideMenuPanelState extends State<SideMenuPanel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            'Vertecx',
+                            'Tecnomaster',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

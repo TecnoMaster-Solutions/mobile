@@ -9,8 +9,22 @@ class OrderServicesService {
   OrderServicesService({String? baseUrl, http.Client? client})
     : baseUrl = baseUrl ?? kBackendBaseUrl;
 
-  Future<List<Map<String, dynamic>>> getOrders() async {
+  Uri _buildUri([Map<String, dynamic>? query]) {
     final uri = Uri.parse('$baseUrl/orders-services');
+    if (query == null || query.isEmpty) {
+      return uri;
+    }
+    return uri.replace(
+      queryParameters: query.map(
+        (key, value) => MapEntry(key, value.toString()),
+      ),
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getOrders({
+    Map<String, dynamic>? query,
+  }) async {
+    final uri = _buildUri(query);
     final response = await ApiHttp.get(uri);
     if (response.statusCode != 200) {
       throw Exception('Error al cargar las órdenes de servicio');
