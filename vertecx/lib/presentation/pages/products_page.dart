@@ -1,4 +1,4 @@
-ï»¿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -64,7 +64,7 @@ class _ProductsPageState extends State<ProductsPage> {
   String _normalize(String s) {
     var v = s.toLowerCase().trim();
 
-    const from = ['Ã¡', 'Ã©', 'Ã­', 'Ã³', 'Ãº', 'Ã¼', 'Ã±'];
+    const from = ['á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ'];
     const to = ['a', 'e', 'i', 'o', 'u', 'u', 'n'];
 
     for (var i = 0; i < from.length; i++) {
@@ -105,6 +105,7 @@ class _ProductsPageState extends State<ProductsPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
+            SessionContext.clearAll();
             Navigator.of(
               context,
             ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
@@ -170,7 +171,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar mÃ¡s productos",
+                              "Cargar más productos",
                               style: TextStyle(color: AppColors.primary),
                             ),
                           ],
@@ -180,7 +181,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          "Ya estÃ¡n todos los productos",
+                          "Ya están todos los productos",
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
@@ -205,3 +206,4 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 }
+

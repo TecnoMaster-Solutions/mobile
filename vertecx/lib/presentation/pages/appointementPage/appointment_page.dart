@@ -82,6 +82,7 @@ class _CalendarPageState extends State<CalendarPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
+            SessionContext.clearAll();
             Navigator.of(context).pushNamedAndRemoveUntil(
               AppRoutes.login,
               (route) => false,
@@ -292,3 +293,4 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 }
+

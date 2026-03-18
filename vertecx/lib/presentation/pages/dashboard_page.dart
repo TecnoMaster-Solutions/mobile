@@ -137,6 +137,7 @@ class _DashboardPageState extends State<DashboardPage> {
             onClose: () => Navigator.of(context).maybePop(),
             onLogout: () {
               Navigator.of(context).maybePop();
+              SessionContext.clearAll();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 AppRoutes.login,
                 (route) => false,
@@ -410,3 +411,4 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 }
+
