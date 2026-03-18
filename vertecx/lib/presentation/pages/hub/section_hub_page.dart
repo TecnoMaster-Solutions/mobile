@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vertecx/core/navigation_helper.dart';
 import 'package:vertecx/core/session_context.dart';
+import 'package:vertecx/presentation/pages/appointementPage/appointment_page_tecnico.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 
@@ -232,15 +233,7 @@ class TechnicianHubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SectionHubPage(
-      title: 'Panel Técnico',
-      items: const [
-        SectionHubItem(
-          icon: Icons.event,
-          label: 'Citas',
-          routeName: AppRoutes.techHome,
-        ),
-      ],
-    );
+    return const AppointmentPageTecnico();
   }
 }
+

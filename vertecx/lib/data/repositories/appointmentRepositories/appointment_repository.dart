@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/mocks/appointments_mock_data.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
 import 'package:vertecx/data/models/orderServices/order_service_models.dart';
@@ -16,23 +17,91 @@ class AppointmentRepository {
   final OrderRepository _orderRepository;
   final RequestsRepository _requestRepository;
   List<AppointmentEvent>? _cache;
+  String? _cacheScopeKey;
 
   Future<List<AppointmentEvent>> _loadAppointments() async {
-    if (_cache != null) return _cache!;
+    final scopeKey = _currentScopeKey();
+    if (_cache != null && _cacheScopeKey == scopeKey) return _cache!;
     try {
       final orders = await _orderRepository.getAll();
       final requests = await _requestRepository.getAll();
       final mapped = <AppointmentEvent>[];
 
-      mapped.addAll(orders.map(_toAppointmentFromOrder));
-      mapped.addAll(requests.map(_toAppointmentFromRequest));
+      final scopedOrders = _filterOrdersBySessionScope(orders);
+      final scopedRequests = _filterRequestsBySessionScope(requests);
 
-      _cache = mapped.isEmpty ? mockAppointments : mapped;
+      mapped.addAll(scopedOrders.map(_toAppointmentFromOrder));
+      mapped.addAll(scopedRequests.map(_toAppointmentFromRequest));
+
+      _cache = mapped.isEmpty && !_isCustomerSession() ? mockAppointments : mapped;
+      _cacheScopeKey = scopeKey;
     } catch (_) {
-      _cache = mockAppointments;
+      _cache = _isCustomerSession() ? <AppointmentEvent>[] : mockAppointments;
+      _cacheScopeKey = scopeKey;
     }
 
     return _cache!;
+  }
+
+  String _currentScopeKey() {
+    final role = (SessionContext.currentRoleName ?? '').toLowerCase().trim();
+    final userId = SessionContext.currentUserId;
+    return '$role:${userId ?? 'none'}';
+  }
+
+  bool _isCustomerSession() {
+    final role = (SessionContext.currentRoleName ?? '').toLowerCase().trim();
+    return role.contains('cliente') ||
+        role.contains('client') ||
+        role.contains('customer');
+  }
+
+  List<OrderService> _filterOrdersBySessionScope(List<OrderService> orders) {
+    if (!_isCustomerSession()) return orders;
+    final userId = SessionContext.currentUserId;
+    if (userId == null) return const <OrderService>[];
+    return orders.where((order) => _orderBelongsToUser(order, userId)).toList();
+  }
+
+  List<ServiceRequestModel> _filterRequestsBySessionScope(
+    List<ServiceRequestModel> requests,
+  ) {
+    if (!_isCustomerSession()) return requests;
+    final userId = SessionContext.currentUserId;
+    if (userId == null) return const <ServiceRequestModel>[];
+    return requests
+        .where((request) => _requestBelongsToUser(request, userId))
+        .toList();
+  }
+
+  bool _orderBelongsToUser(OrderService order, int userId) {
+    final client = order.client;
+    if (client == null) return false;
+    final nestedUser = client['users'] is Map<String, dynamic>
+        ? client['users'] as Map<String, dynamic>
+        : null;
+    final candidates = <dynamic>[
+      client['userid'],
+      client['userId'],
+      nestedUser?['userid'],
+      nestedUser?['userId'],
+      nestedUser?['id'],
+    ];
+    return candidates.map(_toInt).whereType<int>().contains(userId);
+  }
+
+  bool _requestBelongsToUser(ServiceRequestModel request, int userId) {
+    final customer = request.customer;
+    final dynamic rawUsers = customer == null ? null : customer['users'];
+    final nestedUser = rawUsers is Map<String, dynamic> ? rawUsers : null;
+    final candidates = <dynamic>[
+      customer?['userid'],
+      customer?['userId'],
+      nestedUser?['userid'],
+      nestedUser?['userId'],
+      nestedUser?['id'],
+    ];
+    return candidates.map(_toInt).whereType<int>().contains(userId);
   }
 
   Future<List<AppointmentEvent>> getAllAppointments() async {
@@ -224,5 +293,12 @@ class AppointmentRepository {
         (client['address'] ?? client['direccion'])?.toString().trim() ?? '';
     final parts = [street, city, zipcode].where((p) => p.isNotEmpty).toList();
     return parts.isEmpty ? null : parts.join(', ');
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
   }
 }
