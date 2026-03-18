@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/sales/sale_model.dart';
 import 'package:vertecx/data/repositories/sales/sale_repository.dart';
+import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/presentation/widgets/components/search/search.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/side_menu_panel.dart';
@@ -113,9 +115,10 @@ class _SalesPageState extends State<SalesPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
+            SessionContext.clearAll();
             Navigator.of(
               context,
-            ).pushNamedAndRemoveUntil('/login', (route) => false);
+            ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           },
         ),
       ),

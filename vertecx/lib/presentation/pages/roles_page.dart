@@ -1,4 +1,4 @@
-Ôªøimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -74,6 +74,7 @@ class _RolesPageState extends State<RolesPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
+            SessionContext.clearAll();
             Navigator.of(context).pushNamedAndRemoveUntil(
               AppRoutes.login,
               (route) => false,
@@ -150,7 +151,7 @@ class _RolesPageState extends State<RolesPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar m√°s roles",
+                              "Cargar m·s roles",
                               style: TextStyle(color: Color(0xFFB20000)),
                             ),
                           ],
@@ -160,7 +161,7 @@ class _RolesPageState extends State<RolesPage> {
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          "Ya est√°n todos los roles",
+                          "Ya est·n todos los roles",
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
@@ -186,3 +187,4 @@ class _RolesPageState extends State<RolesPage> {
     );
   }
 }
+

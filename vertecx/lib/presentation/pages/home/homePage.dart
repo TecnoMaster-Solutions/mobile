@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.min,
                 children: const [
                   Text(
-                    'Bienvenido a Vertecx',
+                    'Bienvenido a Tecnomaster',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,

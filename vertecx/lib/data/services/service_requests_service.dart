@@ -23,8 +23,13 @@ class ServiceRequestsService {
   Future<List<ServiceRequestModel>> getRequests({
     int page = 1,
     int limit = 50,
+    Map<String, dynamic>? extraQuery,
   }) async {
-    final url = _uri('/service-requests', {'page': page, 'limit': limit});
+    final query = <String, dynamic>{'page': page, 'limit': limit};
+    if (extraQuery != null && extraQuery.isNotEmpty) {
+      query.addAll(extraQuery);
+    }
+    final url = _uri('/service-requests', query);
     try {
       final res = await ApiHttp.get(
         url,

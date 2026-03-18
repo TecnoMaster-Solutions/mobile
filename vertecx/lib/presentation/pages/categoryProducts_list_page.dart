@@ -1,4 +1,4 @@
-ï»¿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/data/models/categoryProducts/categoryProducts_model.dart';
@@ -58,7 +58,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
       create: (_) =>
           CategoryProductBloc(CategoryProductsService())..add(LoadCategories()),
       child: Scaffold(
-        appBar: const AppTopBar(title: 'CategorÃ­Â­as de productos', showMenu: true),
+        appBar: const AppTopBar(title: 'Categorí­as de productos', showMenu: true),
         drawer: Drawer(
           backgroundColor: Colors.transparent,
           child: SideMenuPanel(
@@ -66,6 +66,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
             onClose: () => Navigator.of(context).maybePop(),
             onLogout: () {
               Navigator.of(context).maybePop();
+              SessionContext.clearAll();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 AppRoutes.login,
                 (route) => false,
@@ -111,7 +112,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                     children: [
                       const SizedBox(height: 8),
                       Buscar(
-                        hintText: "Buscar categorÃ­Â­a...",
+                        hintText: "Buscar categorí­a...",
                         onChanged: (value) {
                           setState(() => _searchQuery = value);
                         },
@@ -129,7 +130,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Boton para cargar mÃ¡s
+                      // Boton para cargar más
                       if (filteredCategories.isNotEmpty)
                         if (!allCategoriesLoaded)
                           TextButton(
@@ -144,7 +145,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                                   color: const Color(0xFF089642),
                                 ),
                                 const Text(
-                                  "Cargar mÃ¡s CategorÃ­Â­as de productos",
+                                  "Cargar más Categorí­as de productos",
                                   style: TextStyle(color: Color(0xFF089642)),
                                 ),
                               ],
@@ -154,7 +155,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Ya estÃ¡n todas las categorÃ­Â­as de productos",
+                              "Ya están todas las categorí­as de productos",
                               style: TextStyle(
                                 color: Color(0xFF089642),
                                 fontWeight: FontWeight.bold,
@@ -165,7 +166,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
-                            "No se encontraron categorÃ­as de productos",
+                            "No se encontraron categorías de productos",
                             style: TextStyle(
                               color: Color(0xFF089642),
                               fontWeight: FontWeight.bold,
@@ -179,7 +180,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
               );
             }
 
-            // Estado inicial vacÃ­o
+            // Estado inicial vacío
             return const Center(child: CircularProgressIndicator());
           },
         ),
@@ -192,4 +193,5 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
     );
   }
 }
+
 

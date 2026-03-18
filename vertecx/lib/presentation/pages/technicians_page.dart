@@ -1,4 +1,4 @@
-Ôªøimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -66,7 +66,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppTopBar(title: 'T√©cnicos', showMenu: true),
+      appBar: const AppTopBar(title: 'TÈcnicos', showMenu: true),
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: SideMenuPanel(
@@ -74,6 +74,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
+            SessionContext.clearAll();
             Navigator.of(context).pushNamedAndRemoveUntil(
               AppRoutes.login,
               (route) => false,
@@ -115,7 +116,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
               child: Column(
                 children: [
                   Buscar(
-                    hintText: "Buscar t√©cnico...",
+                    hintText: "Buscar tÈcnico...",
                     onChanged: (v) => setState(() => _searchQuery = v),
                   ),
                   const SizedBox(height: 20),
@@ -124,7 +125,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                     ...page.map((t) => TechnicianCardWidget(technician: t))
                   else
                     const Text(
-                      "No se encontraron t√©cnicos",
+                      "No se encontraron tÈcnicos",
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -146,14 +147,14 @@ class _TechniciansPageState extends State<TechniciansPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
-                                  "Cargar m√°s t√©cnicos",
+                                  "Cargar m·s tÈcnicos",
                                   style: TextStyle(color: AppColors.primary),
                                 ),
                               ],
                             ),
                           )
                         : const Text(
-                            "Ya est√°n todos los t√©cnicos",
+                            "Ya est·n todos los tÈcnicos",
                             style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
@@ -178,3 +179,4 @@ class _TechniciansPageState extends State<TechniciansPage> {
     );
   }
 }
+
