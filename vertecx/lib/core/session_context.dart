@@ -84,7 +84,10 @@ class SessionContext {
   }
 
   static String get normalizedRoleName {
-    final value = (_roleName ?? '').toLowerCase().trim();
+    return _normalizeRole(_roleName ?? '');
+  }
+
+  static String _legacyNormalizeRole(String value) {
     return value
         .replaceAll('á', 'a')
         .replaceAll('é', 'e')
@@ -101,6 +104,30 @@ class SessionContext {
   static bool get isTechnicianRole {
     final role = normalizedRoleName;
     return role == 'tecnico' || role == 'technician' || role == 'technical';
+  }
+
+  static String _normalizeRole(String value) {
+    return value
+        .toLowerCase()
+        .trim()
+        .replaceAll('\u00E1', 'a')
+        .replaceAll('\u00E9', 'e')
+        .replaceAll('\u00ED', 'i')
+        .replaceAll('\u00F3', 'o')
+        .replaceAll('\u00FA', 'u')
+        .replaceAll('\u00F1', 'n')
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ñ', 'n')
+        .replaceAll('Ã¡', 'a')
+        .replaceAll('Ã©', 'e')
+        .replaceAll('Ã­', 'i')
+        .replaceAll('Ã³', 'o')
+        .replaceAll('Ãº', 'u')
+        .replaceAll('Ã±', 'n');
   }
 
   static Future<void> hydrateFromStorage() async {
