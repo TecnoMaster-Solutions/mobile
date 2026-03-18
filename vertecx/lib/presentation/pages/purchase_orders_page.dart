@@ -133,7 +133,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                       padding: EdgeInsets.all(20.0),
                       child: CircularProgressIndicator(),
                     ),
-                  ),
+                  )
                 else if (_errorMessage.isNotEmpty)
                   Center(
                     child: Padding(
@@ -143,7 +143,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                         style: const TextStyle(color: Colors.red),
                       ),
                     ),
-                  ),
+                  )
                 else if (orders.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
@@ -177,7 +177,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                           ),
                         ],
                       ),
-                    ),
+                    )
                   else
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),

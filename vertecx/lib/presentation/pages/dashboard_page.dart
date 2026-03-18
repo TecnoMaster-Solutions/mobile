@@ -13,8 +13,10 @@ import 'package:vertecx/data/repositories/dashboard/bloc/dashboard_states.dart';
 import 'package:vertecx/data/repositories/dashboard/dashboard_repository.dart';
 import 'package:vertecx/presentation/widgets/appointmentsWidgets/appointment_card.dart';
 import 'package:vertecx/presentation/widgets/dashboardWidgets/dashboardCards_widget.dart';
+import 'package:vertecx/presentation/widgets/dashboardWidgets/clients_chart_widget.dart';
 import 'package:vertecx/presentation/widgets/dashboardWidgets/graphhStates_widget.dart';
 import 'package:vertecx/presentation/widgets/dashboardWidgets/pieChart_widget.dart';
+import 'package:vertecx/presentation/widgets/dashboardWidgets/sales_vs_purchases_chart_widget.dart';
 import '../widgets/dashboardWidgets/barChart_widget.dart';
 import '../widgets/dashboardWidgets/graphLines_widget.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
@@ -262,31 +264,29 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 20),
                 BlocBuilder<SalesBloc, SalesState>(
-                  builder: (context, state) {
-                    if (state is SalesLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is SalesLoaded) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: YearSalesChartWidget(
-                          title: "Ventas",
-                          sales: state.sales,
-                          year: _selectedYear,
-                        ),
-                      );
-                    } else if (state is MonthlySalesLoaded) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: MonthSalesChartWidget(
-                          month: state.month,
-                          dailySales: state.dailySales,
-                          year: _selectedYear,
-                        ),
-                      );
-                    } else if (state is SalesError) {
-                      return Center(child: Text(state.message));
+                  builder: (context, salesState) {
+                    final purchasesState = context.watch<PurchasesBloc>().state;
+
+                    if (salesState is SalesError) {
+                      return Center(child: Text(salesState.message));
                     }
-                    return const SizedBox(height: 20);
+                    if (purchasesState is PurchasesError) {
+                      return Center(child: Text(purchasesState.message));
+                    }
+
+                    if (salesState is SalesLoaded &&
+                        purchasesState is PurchasesLoaded) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: SalesVsPurchasesChartWidget(
+                          sales: salesState.sales,
+                          purchases: purchasesState.purchases,
+                          year: _selectedYear,
+                        ),
+                      );
+                    }
+
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
                 BlocBuilder<ClientsBloc, ClientsState>(
@@ -294,48 +294,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     if (state is ClientsLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ClientsLoaded) {
-                      return YearSalesChartWidget(
-                        title: "Clientes",
-                        sales: state.clients.map((c) => Sales(month: c.month, amount: c.amount)).toList(),
-                        isClientChart: true,
-                        year: _selectedYear,
-                      );
-                    } else if (state is MonthlyClientsLoaded) {
-                      return MonthSalesChartWidget(
-                        month: state.month,
-                        dailySales: state.dailyClients,
-                        isClientChart: true,
+                      return ClientsChartWidget(
+                        clients: state.clients,
                         year: _selectedYear,
                       );
                     } else if (state is ClientsError) {
-                      return Center(child: Text(state.message));
-                    }
-                    return const SizedBox(height: 20);
-                  },
-                ),
-                const SizedBox(height: 20),
-                BlocBuilder<PurchasesBloc, PurchasesState>(
-                  builder: (context, state) {
-                    if (state is PurchasesLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is PurchasesLoaded) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: YearSalesChartWidget(
-                          title: "Compras",
-                          sales: state.purchases,
-                          isPurchasesChart: true,
-                          year: _selectedYear,
-                        ),
-                      );
-                    } else if (state is MonthlyPurchasesLoaded) {
-                      return MonthSalesChartWidget(
-                        month: state.month,
-                        dailySales: state.dailyPurchases,
-                        isPurchasesChart: true,
-                        year: _selectedYear,
-                      );
-                    } else if (state is PurchasesError) {
                       return Center(child: Text(state.message));
                     }
                     return const SizedBox(height: 20);
