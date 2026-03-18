@@ -10,6 +10,7 @@ import 'package:vertecx/presentation/widgets/rolesWidgets/roles_card_widget.dart
 import 'package:vertecx/data/repositories/roles/bloc/roles_bloc.dart';
 import 'package:vertecx/data/repositories/roles/bloc/roles_event.dart';
 import 'package:vertecx/data/repositories/roles/bloc/roles_state.dart';
+import 'package:vertecx/presentation/themes/app_colors.dart';
 
 class RolesPage extends StatefulWidget {
   const RolesPage({super.key});
@@ -161,7 +162,7 @@ class _RolesPageState extends State<RolesPage> {
                         child: Text(
                           "Ya están todos los roles",
                           style: TextStyle(
-                            color: Color(0xFFB20000),
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

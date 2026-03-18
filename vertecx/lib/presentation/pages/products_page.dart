@@ -10,6 +10,7 @@ import 'package:vertecx/presentation/widgets/productsWidgets/product_card_widget
 import 'package:vertecx/data/repositories/products/bloc/products_bloc.dart';
 import 'package:vertecx/data/repositories/products/bloc/products_event.dart';
 import 'package:vertecx/data/repositories/products/bloc/products_state.dart';
+import 'package:vertecx/presentation/themes/app_colors.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -28,7 +29,9 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductsBloc>().add(LoadProductsEvent());
+    context.read<ProductsBloc>().add(
+      LoadProductsEvent(status: 'all', page: 1, limit: 50),
+    );
   }
 
   @override
@@ -78,7 +81,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
     final name = _normalize(p.name ?? '');
     final desc = _normalize(p.description ?? '');
-    final cat = _normalize(p.category ?? '');
+    final cat = _normalize(p.categoryName);
     final supCat = _normalize(p.supplierCategory ?? '');
     final code = _normalize(p.code ?? '');
     final status = _normalize(p.statusString ?? '');
@@ -102,10 +105,9 @@ class _ProductsPageState extends State<ProductsPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRoutes.login,
-              (route) => false,
-            );
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           },
         ),
       ),
@@ -150,7 +152,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       child: Text(
                         "No se encontraron productos",
                         style: TextStyle(
-                          color: Color(0xFFB20000),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -169,7 +171,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             ),
                             const Text(
                               "Cargar más productos",
-                              style: TextStyle(color: Color(0xFFB20000)),
+                              style: TextStyle(color: AppColors.primary),
                             ),
                           ],
                         ),
@@ -180,7 +182,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         child: Text(
                           "Ya están todos los productos",
                           style: TextStyle(
-                            color: Color(0xFFB20000),
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

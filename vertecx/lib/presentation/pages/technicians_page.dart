@@ -10,6 +10,7 @@ import 'package:vertecx/presentation/widgets/techniciansWidgets/technicians_card
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_bloc.dart';
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_event.dart';
 import 'package:vertecx/data/repositories/technicians/bloc/technicians_state.dart';
+import 'package:vertecx/presentation/themes/app_colors.dart';
 
 class TechniciansPage extends StatefulWidget {
   const TechniciansPage({super.key});
@@ -125,7 +126,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                     const Text(
                       "No se encontraron técnicos",
                       style: TextStyle(
-                        color: Color(0xFFB20000),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -146,7 +147,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                                 const SizedBox(height: 4),
                                 const Text(
                                   "Cargar más técnicos",
-                                  style: TextStyle(color: Color(0xFFB20000)),
+                                  style: TextStyle(color: AppColors.primary),
                                 ),
                               ],
                             ),
@@ -154,7 +155,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
                         : const Text(
                             "Ya están todos los técnicos",
                             style: TextStyle(
-                              color: Color(0xFFB20000),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

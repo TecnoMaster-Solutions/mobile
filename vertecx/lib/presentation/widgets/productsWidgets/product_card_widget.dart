@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/products/product_model.dart';
 import 'product_detail_widget.dart';
+import '../../themes/app_colors.dart';
 
 class ProductCardWidget extends StatelessWidget {
   final ProductModel product;
@@ -113,7 +114,7 @@ class ProductCardWidget extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xffB20000),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

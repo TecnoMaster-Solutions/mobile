@@ -10,6 +10,7 @@ import 'package:vertecx/presentation/widgets/servicesWidgets/services_card_widge
 import 'package:vertecx/data/repositories/services/bloc/services_bloc.dart';
 import 'package:vertecx/data/repositories/services/bloc/services_event.dart';
 import 'package:vertecx/data/repositories/services/bloc/services_state.dart';
+import 'package:vertecx/presentation/themes/app_colors.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -155,7 +156,7 @@ class _ServicesPageState extends State<ServicesPage> {
                                     ? "Cargando..."
                                     : "Cargar más servicios",
                                 style:
-                                    const TextStyle(color: Color(0xFFB20000)),
+                                    const TextStyle(color: AppColors.primary),
                               ),
                             ],
                           ),
@@ -166,7 +167,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           child: Text(
                             "Ya están todos los servicios",
                             style: TextStyle(
-                              color: Color(0xFFB20000),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

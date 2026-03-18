@@ -180,7 +180,7 @@ class ProductDetailWidget extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            product.category ?? "N/A",
+                            product.categoryName,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
