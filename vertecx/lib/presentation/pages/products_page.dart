@@ -64,7 +64,7 @@ class _ProductsPageState extends State<ProductsPage> {
   String _normalize(String s) {
     var v = s.toLowerCase().trim();
 
-    const from = ['Ã¡', 'Ã©', 'Ã­', 'Ã³', 'Ãº', 'Ã¼', 'Ã±'];
+    const from = ['á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ'];
     const to = ['a', 'e', 'i', 'o', 'u', 'u', 'n'];
 
     for (var i = 0; i < from.length; i++) {

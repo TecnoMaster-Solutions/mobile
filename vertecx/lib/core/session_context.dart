@@ -35,6 +35,22 @@ class SessionContext {
     unawaited(_persistRefreshToken());
   }
 
+  static int? get currentUserId {
+    final payload = _decodeAccessPayload();
+    if (payload == null) return null;
+    return _toInt(payload['userid']) ?? _toInt(payload['userId']) ?? _toInt(payload['sub']);
+  }
+
+  static String? get currentRoleName {
+    final payload = _decodeAccessPayload();
+    if (payload == null) return null;
+    final role =
+        payload['rolename'] ?? payload['roleName'] ?? payload['role'];
+    if (role is! String) return null;
+    final normalized = role.trim();
+    return normalized.isEmpty ? null : normalized;
+  }
+
   static Future<void> hydrateFromStorage() async {
     bool hadStorageError = false;
     String? access;
@@ -163,5 +179,34 @@ class SessionContext {
     } catch (_) {}
 
     return const <String>[];
+  }
+
+  static Map<String, dynamic>? _decodeAccessPayload() {
+    final token = _accessToken;
+    if (token == null || token.isEmpty) return null;
+
+    try {
+      if (token.trim().startsWith('{')) {
+        final parsed = jsonDecode(token);
+        return parsed is Map<String, dynamic> ? parsed : null;
+      }
+
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+
+      final normalized = base64Url.normalize(parts[1]);
+      final decoded = utf8.decode(base64Url.decode(normalized));
+      final payload = jsonDecode(decoded);
+      return payload is Map<String, dynamic> ? payload : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
   }
 }

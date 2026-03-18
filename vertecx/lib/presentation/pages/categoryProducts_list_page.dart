@@ -129,7 +129,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // BotÃƒÂ³n para cargar mÃƒÂ¡s
+                      // Boton para cargar más
                       if (filteredCategories.isNotEmpty)
                         if (!allCategoriesLoaded)
                           TextButton(
@@ -179,7 +179,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
               );
             }
 
-            // Estado inicial vacÃƒÂ­o
+            // Estado inicial vacío
             return const Center(child: CircularProgressIndicator());
           },
         ),

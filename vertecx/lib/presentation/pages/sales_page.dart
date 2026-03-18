@@ -1,10 +1,10 @@
-﻿import 'package:flutter/material.dart';
-import 'package:vertecx/data/repositories/sales/sale_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:vertecx/data/models/sales/sale_model.dart';
+import 'package:vertecx/data/repositories/sales/sale_repository.dart';
+import 'package:vertecx/presentation/widgets/components/search/search.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/side_menu_panel.dart';
 import 'package:vertecx/presentation/widgets/salesWidgets/sales_card_widget.dart';
-import 'package:vertecx/presentation/widgets/components/search/search.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});
@@ -16,12 +16,11 @@ class SalesPage extends StatefulWidget {
 class _SalesPageState extends State<SalesPage> {
   final ScrollController _scrollController = ScrollController();
   final SaleRepository _repository = SaleRepository();
-  
+
   List<SaleModel> _allSales = [];
   List<SaleModel> _filteredSales = [];
   bool _isLoading = true;
   String _errorMessage = "";
-  String _searchQuery = "";
   int _itemsToShow = 4;
   List<String> _permissions = const <String>[];
 
@@ -48,6 +47,12 @@ class _SalesPageState extends State<SalesPage> {
     _loadSales();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadSales() async {
     setState(() {
       _isLoading = true;
@@ -70,12 +75,11 @@ class _SalesPageState extends State<SalesPage> {
 
   void _filterSales(String query) {
     setState(() {
-      _searchQuery = query;
+      final q = query.toLowerCase();
       _filteredSales = _allSales.where((s) {
-        final q = query.toLowerCase();
         return s.clientName.toLowerCase().contains(q) ||
-               s.id.toLowerCase().contains(q) ||
-               s.saleCode.toLowerCase().contains(q);
+            s.id.toLowerCase().contains(q) ||
+            s.saleCode.toLowerCase().contains(q);
       }).toList();
       _itemsToShow = 4;
     });
@@ -109,7 +113,9 @@ class _SalesPageState extends State<SalesPage> {
           onClose: () => Navigator.of(context).maybePop(),
           onLogout: () {
             Navigator.of(context).maybePop();
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/login', (route) => false);
           },
         ),
       ),
@@ -122,75 +128,73 @@ class _SalesPageState extends State<SalesPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Buscar(
-                hintText: "Buscar cliente o ID...",
-                onChanged: _filterSales,
-              ),
-              const SizedBox(height: 20),
-              
-              if (_isLoading)
-                const Center(child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(),
-                ))
-              else if (_errorMessage.isNotEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      "Error: $_errorMessage",
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                )
-              else if (sales.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    "No se encontraron ventas",
-                    style: TextStyle(
-                      color: Color(0xFFB20000),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              else
-                ...sales.map((s) => SaleCardWidget(sale: s)),
-
-              const SizedBox(height: 20),
-
-              if (!_isLoading && _filteredSales.isNotEmpty)
-                if (!allSalesLoaded)
-                  TextButton(
-                    onPressed: _loadMore,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "assets/icons/Vector.png",
-                          width: 20,
-                          height: 20,
-                        ),
-                        const Text(
-                          "Cargar más ventas",
-                          style: TextStyle(color: Color(0xFFB20000)),
-                        ),
-                      ],
+              children: [
+                const SizedBox(height: 20),
+                Buscar(
+                  hintText: "Buscar cliente o ID...",
+                  onChanged: _filterSales,
+                ),
+                const SizedBox(height: 20),
+                if (_isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(),
                     ),
                   )
-                else
+                else if (_errorMessage.isNotEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        "Error: $_errorMessage",
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  )
+                else if (sales.isEmpty)
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      "Ya están todas las ventas",
+                      "No se encontraron ventas",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-
+                  )
+                else
+                  ...sales.map((s) => SaleCardWidget(sale: s)),
+                const SizedBox(height: 20),
+                if (!_isLoading && _filteredSales.isNotEmpty)
+                  if (!allSalesLoaded)
+                    TextButton(
+                      onPressed: _loadMore,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/icons/Vector.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                          const Text(
+                            "Cargar mas ventas",
+                            style: TextStyle(color: Color(0xFFB20000)),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Ya estan todas las ventas",
+                        style: TextStyle(
+                          color: Color(0xFFB20000),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                 const SizedBox(height: 40),
               ],
             ),
@@ -205,4 +209,3 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 }
-

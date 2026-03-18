@@ -150,7 +150,7 @@ class _RolesPageState extends State<RolesPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar mÃ¡s roles",
+                              "Cargar más roles",
                               style: TextStyle(color: Color(0xFFB20000)),
                             ),
                           ],

@@ -66,7 +66,7 @@ class _TechniciansPageState extends State<TechniciansPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppTopBar(title: 'TÃ©cnicos', showMenu: true),
+      appBar: const AppTopBar(title: 'Técnicos', showMenu: true),
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: SideMenuPanel(

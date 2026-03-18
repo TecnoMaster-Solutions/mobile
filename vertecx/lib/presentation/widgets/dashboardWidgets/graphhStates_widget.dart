@@ -59,6 +59,18 @@ class StateChartWidget extends StatelessWidget {
                   barTouchData: BarTouchData(
                     enabled: true,
                     touchTooltipData: BarTouchTooltipData(
+                      getTooltipColor: (_) => const Color(0xFF111111),
+                      tooltipBorderRadius: BorderRadius.circular(8),
+                      tooltipBorder: const BorderSide(
+                        color: Color(0xFF06A646),
+                        width: 1.2,
+                      ),
+                      tooltipPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      fitInsideHorizontally: true,
+                      fitInsideVertically: true,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final index = group.x.toInt();
                         final value = (index >= 0 && index < values.length)
@@ -67,7 +79,7 @@ class StateChartWidget extends StatelessWidget {
                         return BarTooltipItem(
                           value.toString(),
                           const TextStyle(
-                            color: Color(0xFF04652C),
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         );

@@ -411,7 +411,7 @@ const _menuItems = [
         requiredPermissions: ['services.read'],
       ),
       _SideMenuItem(
-        label: 'Tecnicos',
+        label: 'Técnicos',
         route: AppRoutes.techniciansList,
         requiredPermissions: ['technicians.read'],
       ),

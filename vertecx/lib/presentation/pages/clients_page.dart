@@ -129,7 +129,7 @@ class _ClientsPageState extends State<ClientsPage> {
                 onChanged: _filterCustomers,
               ),
               const SizedBox(height: 20),
-              
+
               if (_isLoading)
                 const Center(child: CircularProgressIndicator())
               else if (_errorMessage.isNotEmpty)

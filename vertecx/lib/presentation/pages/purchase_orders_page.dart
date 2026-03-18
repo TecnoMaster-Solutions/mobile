@@ -16,12 +16,11 @@ class PurchaseOrdersPage extends StatefulWidget {
 class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   final ScrollController _scrollController = ScrollController();
   final PurchaseOrderRepository _repository = PurchaseOrderRepository();
-  
+
   List<PurchaseOrderModel> _allOrders = [];
   List<PurchaseOrderModel> _filteredOrders = [];
   bool _isLoading = true;
   String _errorMessage = "";
-  String _searchQuery = "";
   int _itemsToShow = 4;
   List<String> _permissions = const <String>[];
 
@@ -70,12 +69,11 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
 
   void _filterOrders(String query) {
     setState(() {
-      _searchQuery = query;
       _filteredOrders = _allOrders.where((o) {
         final q = query.toLowerCase();
         return o.supplier.toLowerCase().contains(q) ||
-               o.orderIdString.toLowerCase().contains(q) ||
-               o.orderNumber.toLowerCase().contains(q);
+            o.orderIdString.toLowerCase().contains(q) ||
+            o.orderNumber.toLowerCase().contains(q);
       }).toList();
       _itemsToShow = 4;
     });
@@ -122,78 +120,79 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Buscar(
-                hintText: "Buscar órdenes...",
-                onChanged: _filterOrders,
-              ),
-              const SizedBox(height: 20),
-              
-              if (_isLoading)
-                const Center(child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(),
-                ))
-              else if (_errorMessage.isNotEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      "Error: $_errorMessage",
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                )
-              else if (orders.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    "No se encontraron órdenes",
-                    style: TextStyle(
-                      color: Color(0xFFB20000),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              else
-                ...orders.map((o) => PurchaseOrderCardWidget(order: o)),
-
-              const SizedBox(height: 20),
-
-              if (!_isLoading && _filteredOrders.isNotEmpty)
-                if (!allOrdersLoaded)
-                  TextButton(
-                    onPressed: _loadMore,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "assets/icons/Vector.png",
-                          width: 20,
-                          height: 20,
-                        ),
-                        const Text(
-                          "Cargar más órdenes",
-                          style: TextStyle(color: Color(0xFFB20000)),
-                        ),
-                      ],
+              children: [
+                const SizedBox(height: 20),
+                Buscar(
+                  hintText: "Buscar órdenes...",
+                  onChanged: _filterOrders,
+                ),
+                const SizedBox(height: 20),
+                if (_isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(),
                     ),
                   )
-                else
+                else if (_errorMessage.isNotEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        "Error: $_errorMessage",
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  )
+                else if (orders.isEmpty)
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      "Ya están todas las órdenes",
+                      "No se encontraron órdenes",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
+                  )
+                else
+                  ...orders.map((o) => PurchaseOrderCardWidget(order: o)),
 
+                const SizedBox(height: 20),
+
+                if (!_isLoading && _filteredOrders.isNotEmpty)
+                  if (!allOrdersLoaded)
+                    TextButton(
+                      onPressed: _loadMore,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/icons/Vector.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                          const Text(
+                            "Cargar más órdenes",
+                            style: TextStyle(color: Color(0xFFB20000)),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Ya están todas las órdenes",
+                        style: TextStyle(
+                          color: Color(0xFFB20000),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                 const SizedBox(height: 40),
               ],
             ),
+
           ),
         ),
       ),

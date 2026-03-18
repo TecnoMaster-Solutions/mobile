@@ -61,7 +61,7 @@ class AppointmentCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              //Columna izquierda (DÃ­a)
+              //Columna izquierda (Dí­a)
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -149,7 +149,7 @@ class AppointmentCard extends StatelessWidget {
 
                     const SizedBox(height: 4),
 
-                    // DescripciÃ³n
+                    // Descripción
                     Text(
                       cita.orden.descripcion,
                       style: const TextStyle(
@@ -160,7 +160,7 @@ class AppointmentCard extends StatelessWidget {
 
                     const SizedBox(height: 8),
 
-                    // TÃ©cnico
+                    // Técnico
                     Row(
                       children: [
                         const Icon(
@@ -179,7 +179,7 @@ class AppointmentCard extends StatelessWidget {
                           ),
                         ),
 
-                        //Estado interactivo con confirmaciÃ³n
+                        //Estado interactivo con confirmación
                         PopupMenuButton<String>(
                           onSelected: (value) {
                             AppDialogs.showConfirmChangeStatus(
