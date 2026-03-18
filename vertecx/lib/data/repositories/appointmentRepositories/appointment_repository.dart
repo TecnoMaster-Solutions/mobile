@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:vertecx/core/session_context.dart';
+import 'package:vertecx/core/session_user_scope.dart';
 import 'package:vertecx/data/mocks/appointments_mock_data.dart';
 import 'package:vertecx/data/models/appointments/appointment_model.dart';
 import 'package:vertecx/data/models/orderServices/order_service_models.dart';
@@ -20,58 +21,88 @@ class AppointmentRepository {
   String? _cacheScopeKey;
 
   Future<List<AppointmentEvent>> _loadAppointments() async {
-    final scopeKey = _currentScopeKey();
+    final scope = await SessionUserScopeResolver.resolve();
+    final scopeKey = _scopeKey(scope);
     if (_cache != null && _cacheScopeKey == scopeKey) return _cache!;
     try {
       final orders = await _orderRepository.getAll();
       final requests = await _requestRepository.getAll();
       final mapped = <AppointmentEvent>[];
 
-      final scopedOrders = _filterOrdersBySessionScope(orders);
-      final scopedRequests = _filterRequestsBySessionScope(requests);
+      final scopedOrders = _filterOrdersBySessionScope(orders, scope);
+      final scopedRequests = _filterRequestsBySessionScope(requests, scope);
 
       mapped.addAll(scopedOrders.map(_toAppointmentFromOrder));
       mapped.addAll(scopedRequests.map(_toAppointmentFromRequest));
 
-      _cache = mapped.isEmpty && !_isCustomerSession() ? mockAppointments : mapped;
+      final result = scope.isTechnicianRole
+          ? mapped
+              .where((appointment) => appointment.orden.tecnicos.isNotEmpty)
+              .toList()
+          : mapped;
+
+      _cache = result.isEmpty && !_hasAuthenticatedSession()
+          ? mockAppointments
+          : result;
       _cacheScopeKey = scopeKey;
     } catch (_) {
-      _cache = _isCustomerSession() ? <AppointmentEvent>[] : mockAppointments;
+      _cache = _hasAuthenticatedSession()
+          ? <AppointmentEvent>[]
+          : mockAppointments;
       _cacheScopeKey = scopeKey;
     }
 
     return _cache!;
   }
 
-  String _currentScopeKey() {
-    final role = (SessionContext.currentRoleName ?? '').toLowerCase().trim();
-    final userId = SessionContext.currentUserId;
-    return '$role:${userId ?? 'none'}';
+  String _scopeKey(SessionUserScope scope) {
+    return '${scope.roleName.toLowerCase().trim()}:${scope.userId ?? 'none'}:${scope.customerId ?? 'none'}:${scope.technicianId ?? 'none'}';
   }
 
-  bool _isCustomerSession() {
-    final role = (SessionContext.currentRoleName ?? '').toLowerCase().trim();
-    return role.contains('cliente') ||
-        role.contains('client') ||
-        role.contains('customer');
+  bool _hasAuthenticatedSession() {
+    return (SessionContext.accessToken ?? '').trim().isNotEmpty;
   }
 
-  List<OrderService> _filterOrdersBySessionScope(List<OrderService> orders) {
-    if (!_isCustomerSession()) return orders;
-    final userId = SessionContext.currentUserId;
-    if (userId == null) return const <OrderService>[];
-    return orders.where((order) => _orderBelongsToUser(order, userId)).toList();
+  List<OrderService> _filterOrdersBySessionScope(
+    List<OrderService> orders,
+    SessionUserScope scope,
+  ) {
+    if (scope.isClientRole) {
+      final userId = scope.userId;
+      if (userId == null) return const <OrderService>[];
+      return orders.where((order) => _orderBelongsToUser(order, userId)).toList();
+    }
+
+    if (scope.isTechnicianRole) {
+      if (scope.technicianId == null) return const <OrderService>[];
+      return orders;
+    }
+
+    return orders;
   }
 
   List<ServiceRequestModel> _filterRequestsBySessionScope(
     List<ServiceRequestModel> requests,
+    SessionUserScope scope,
   ) {
-    if (!_isCustomerSession()) return requests;
-    final userId = SessionContext.currentUserId;
-    if (userId == null) return const <ServiceRequestModel>[];
-    return requests
-        .where((request) => _requestBelongsToUser(request, userId))
-        .toList();
+    if (scope.isClientRole) {
+      final userId = scope.userId;
+      if (userId == null) return const <ServiceRequestModel>[];
+      return requests
+          .where((request) => _requestBelongsToUser(request, userId))
+          .toList();
+    }
+
+    if (scope.isTechnicianRole) {
+      final technicianId = scope.technicianId;
+      if (technicianId == null) return const <ServiceRequestModel>[];
+      return requests.where((request) {
+        final technicianIds = request.technicianIds;
+        return technicianIds.contains(technicianId);
+      }).toList();
+    }
+
+    return requests;
   }
 
   bool _orderBelongsToUser(OrderService order, int userId) {
@@ -203,6 +234,9 @@ class AppointmentRepository {
     final inicio = _formatTime(fecha);
     final end = request.scheduledEndAt ?? fecha.add(const Duration(hours: 2));
     final fin = _formatTime(end);
+    final tecnicos = request.technicianNames
+        .map((name) => Technician(titulo: 'Tecnico', nombre: name))
+        .toList();
     final cliente = request.customerName;
     final direccion = request.direccion ?? '';
     final servicioName =
@@ -227,7 +261,7 @@ class AppointmentRepository {
         monto: 'Valor no registrado',
         nombreCliente: cliente,
         direccion: direccion,
-        tecnicos: const [],
+        tecnicos: tecnicos,
         descripcion: request.description,
         servicio: servicioName,
         materiales: null,
