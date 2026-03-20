@@ -168,7 +168,7 @@ class UserListPageState extends State<UserListPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Botón para cargar más
+                        // BotÃ³n para cargar mÃ¡s
                         if (filteredUsers.isNotEmpty)
                           if (!allUsersLoaded)
                             TextButton(
@@ -183,7 +183,7 @@ class UserListPageState extends State<UserListPage> {
                                     color: const Color(0xFF089642),
                                   ),
                                   const Text(
-                                    "Cargar más Usuarios",
+                                    "Cargar mÃ¡s Usuarios",
                                     style: TextStyle(color: Color(0xFF089642)),
                                   ),
                                 ],
@@ -193,7 +193,7 @@ class UserListPageState extends State<UserListPage> {
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                "Ya están todos los usuarios",
+                                "Ya estÃ¡n todos los usuarios",
                                 style: TextStyle(
                                   color: Color(0xFF089642),
                                   fontWeight: FontWeight.bold,

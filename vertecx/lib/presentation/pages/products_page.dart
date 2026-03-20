@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ï»¿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -64,7 +64,7 @@ class _ProductsPageState extends State<ProductsPage> {
   String _normalize(String s) {
     var v = s.toLowerCase().trim();
 
-    const from = ['á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ'];
+    const from = ['Ã¡', 'Ã©', 'Ã­', 'Ã³', 'Ãº', 'Ã¼', 'Ã±'];
     const to = ['a', 'e', 'i', 'o', 'u', 'u', 'n'];
 
     for (var i = 0; i < from.length; i++) {
@@ -171,7 +171,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               height: 20,
                             ),
                             const Text(
-                              "Cargar más productos",
+                              "Cargar mÃ¡s productos",
                               style: TextStyle(color: AppColors.primary),
                             ),
                           ],
@@ -181,7 +181,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          "Ya están todos los productos",
+                          "Ya estÃ¡n todos los productos",
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
