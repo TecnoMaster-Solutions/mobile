@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+锘縤mport 'package:flutter/material.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/data/repositories/purchases/purchase_order_repository.dart';
@@ -128,7 +128,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               children: [
                 const SizedBox(height: 20),
                 Buscar(
-                  hintText: "Buscar 髍denes...",
+                  hintText: "Buscar 贸rdenes...",
                   onChanged: _filterOrders,
                 ),
                 const SizedBox(height: 20),
@@ -153,7 +153,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      "No se encontraron 髍denes",
+                      "No se encontraron 贸rdenes",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,
@@ -177,7 +177,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                             height: 20,
                           ),
                           const Text(
-                            "Cargar m醩 髍denes",
+                            "Cargar m谩s 贸rdenes",
                             style: TextStyle(color: Color(0xFFB20000)),
                           ),
                         ],
@@ -187,7 +187,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        "Ya est醤 todas las 髍denes",
+                        "Ya est谩n todas las 贸rdenes",
                         style: TextStyle(
                           color: Color(0xFFB20000),
                           fontWeight: FontWeight.bold,
