@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+Ôªøimport 'package:flutter/material.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
 import 'package:vertecx/presentation/widgets/navigationWidgets/app_top_bar.dart';
@@ -174,7 +174,7 @@ class _ClientsPageState extends State<ClientsPage> {
                           height: 20,
                         ),
                         const Text(
-                          "Cargar m·s clientes",
+                          "Cargar ms clientes",
                           style: TextStyle(color: Color(0xFFB20000)),
                         ),
                       ],
@@ -184,7 +184,7 @@ class _ClientsPageState extends State<ClientsPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "Ya est·n todos los clientes",
+                      "Ya est√°n todos los clientes",
                       style: TextStyle(
                         color: Color(0xFFB20000),
                         fontWeight: FontWeight.bold,

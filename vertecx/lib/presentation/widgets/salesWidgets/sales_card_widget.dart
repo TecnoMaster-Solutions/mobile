@@ -105,7 +105,7 @@ class SaleCardWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    sale.paymentStatus,
+                    sale.paymentStatusString,
                     style: TextStyle(
                       color: sale.paymentStatusColor,
                       fontSize: 12,

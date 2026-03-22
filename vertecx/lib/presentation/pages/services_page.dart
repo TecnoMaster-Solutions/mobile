@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+Ôªøimport 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vertecx/core/session_context.dart';
 import 'package:vertecx/presentation/routes/app_routes.dart';
@@ -155,7 +155,7 @@ class _ServicesPageState extends State<ServicesPage> {
                               Text(
                                 state.loadingMore
                                     ? "Cargando..."
-                                    : "Cargar m·s servicios",
+                                    : "Cargar m√°s servicios",
                                 style:
                                     const TextStyle(color: AppColors.primary),
                               ),
@@ -166,7 +166,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
-                            "Ya est·n todos los servicios",
+                            "Ya est√°n todos los servicios",
                             style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,

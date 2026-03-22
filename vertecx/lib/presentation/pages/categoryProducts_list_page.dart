@@ -58,7 +58,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
       create: (_) =>
           CategoryProductBloc(CategoryProductsService())..add(LoadCategories()),
       child: Scaffold(
-        appBar: const AppTopBar(title: 'CategorÌ≠as de productos', showMenu: true),
+        appBar: const AppTopBar(title: 'Categor√≠as de productos', showMenu: true),
         drawer: Drawer(
           backgroundColor: Colors.transparent,
           child: SideMenuPanel(
@@ -112,7 +112,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                     children: [
                       const SizedBox(height: 8),
                       Buscar(
-                        hintText: "Buscar categorÌ≠a...",
+                        hintText: "Buscar categor√≠a...",
                         onChanged: (value) {
                           setState(() => _searchQuery = value);
                         },
@@ -130,7 +130,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Boton para cargar m·s
+                      // Boton para cargar m√°s
                       if (filteredCategories.isNotEmpty)
                         if (!allCategoriesLoaded)
                           TextButton(
@@ -145,7 +145,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                                   color: const Color(0xFF089642),
                                 ),
                                 const Text(
-                                  "Cargar m·s CategorÌ≠as de productos",
+                                  "Cargar m√°s Categor√≠as de productos",
                                   style: TextStyle(color: Color(0xFF089642)),
                                 ),
                               ],
@@ -155,7 +155,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Ya est·n todas las categorÌ≠as de productos",
+                              "Ya est√°n todas las categor√≠as de productos",
                               style: TextStyle(
                                 color: Color(0xFF089642),
                                 fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
-                            "No se encontraron categorÌas de productos",
+                            "No se encontraron categor√≠as de productos",
                             style: TextStyle(
                               color: Color(0xFF089642),
                               fontWeight: FontWeight.bold,
@@ -180,7 +180,7 @@ class _CategoryProductListPageState extends State<CategoryProductListPage> {
               );
             }
 
-            // Estado inicial vacÌo
+            // Estado inicial vac√≠o
             return const Center(child: CircularProgressIndicator());
           },
         ),
