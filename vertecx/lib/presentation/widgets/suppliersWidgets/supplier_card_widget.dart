@@ -80,12 +80,12 @@ class SupplierCardWidget extends StatelessWidget {
                           curve: Curves.easeOut,
                           decoration: BoxDecoration(
                             color: isActive
-                                ? const Color(0xFFFFEBEE)
+                                ? const Color(0xFFFFF3E0)
                                 : const Color(0xFFE8F5E9),
                             borderRadius: BorderRadius.circular(999),
                             border: Border.all(
                               color: isActive
-                                  ? const Color(0xFFEF9A9A)
+                                  ? const Color(0xFFFFCC80)
                                   : const Color(0xFFA5D6A7),
                             ),
                           ),
@@ -110,10 +110,10 @@ class SupplierCardWidget extends StatelessWidget {
                                     )
                                   else
                                     Icon(
-                                      isActive ? Icons.block : Icons.check,
+                                      isActive ? Icons.pause_circle : Icons.check_circle,
                                       size: 15,
                                       color: isActive
-                                          ? const Color(0xFFC62828)
+                                          ? const Color(0xFFEF6C00)
                                           : const Color(0xFF2E7D32),
                                     ),
                                   const SizedBox(width: 6),
@@ -121,7 +121,7 @@ class SupplierCardWidget extends StatelessWidget {
                                     isActive ? 'Inactivar' : 'Activar',
                                     style: TextStyle(
                                       color: isActive
-                                          ? const Color(0xFFC62828)
+                                          ? const Color(0xFFEF6C00)
                                           : const Color(0xFF2E7D32),
                                       fontWeight: FontWeight.w700,
                                     ),
