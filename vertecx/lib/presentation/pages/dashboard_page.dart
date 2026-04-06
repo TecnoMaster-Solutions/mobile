@@ -230,14 +230,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           return SummaryCard(
                             icon: Icons.event_note,
                             iconColor: const Color(0xFF04652C),
-                            title: "Solicitudes de servicio:",
+                            title: "Solicitudes:",
                             value: total.toString(),
                           );
                         }
                         return const SummaryCard(
                           icon: Icons.event_note,
                           iconColor: Color(0xFF04652C),
-                          title: "Solicitudes de servicio:",
+                          title: "Solicitudes:",
                           value: "...",
                         );
                       },
@@ -313,7 +313,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       final labels = state.states.keys.toList();
                       final values = state.states.values.toList();
                       return StateChartWidget(
-                        title: "Solicitudes de servicio",
+                        title: "Solicitudes",
                         description: "Comparacion de solicitudes por estado",
                         labels: labels,
                         values: values,
